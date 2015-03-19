@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author jouni
  */
-public class Polunetsija {
+public class Polunetsija { 
 
     public Polunetsija(Verkko verkko) {
         this.verkko = verkko;
