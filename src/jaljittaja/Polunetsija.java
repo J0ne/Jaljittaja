@@ -12,6 +12,7 @@ import java.awt.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Random;
 import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,37 +21,55 @@ import java.util.logging.Logger;
  *
  * @author jouni
  */
-public class Polunetsija { 
-/*
-    OPEN = priority queue containing START
-CLOSED = empty set
-while lowest rank in OPEN is not the GOAL:
-  current = remove lowest rank item from OPEN
-  add current to CLOSED
-  for neighbors of current:
-    cost = g(current) + movementcost(current, neighbor)
-    if neighbor in OPEN and cost less than g(neighbor):
-      remove neighbor from OPEN, because new path is better
-    if neighbor in CLOSED and cost less than g(neighbor): **
-      remove neighbor from CLOSED
-    if neighbor not in OPEN and neighbor not in CLOSED:
-      set g(neighbor) to cost
-      add neighbor to OPEN
-      set priority queue rank to g(neighbor) + h(neighbor)
-      set neighbor's parent to current
+public class Polunetsija {
+    /*
+     OPEN = priority queue containing START
+     CLOSED = empty set
+     while lowest rank in OPEN is not the GOAL:
+     current = remove lowest rank item from OPEN
+     add current to CLOSED
+     for neighbors of current:
+     cost = g(current) + movementcost(current, neighbor)
+     if neighbor in OPEN and cost less than g(neighbor):
+     remove neighbor from OPEN, because new path is better
+     if neighbor in CLOSED and cost less than g(neighbor): **
+     remove neighbor from CLOSED
+     if neighbor not in OPEN and neighbor not in CLOSED:
+     set g(neighbor) to cost
+     add neighbor to OPEN
+     set priority queue rank to g(neighbor) + h(neighbor)
+     set neighbor's parent to current
 
-reconstruct reverse path from goal to start
-by following parent pointers
+     reconstruct reverse path from goal to start
+     by following parent pointers
     
-    */
+     */
+
+    /**
+     *
+     * @param verkko
+     */
     public Polunetsija(Verkko verkko) {
         this.verkko = verkko;
     }
 
+    /**
+     *
+     */
     public Verkko verkko;
+
+    /**
+     *
+     */
     public Verkkonakyma nakyma;
     Graphics g;
 
+    /**
+     *
+     * @param alkupiste
+     * @param maali
+     * @return
+     */
     public ArrayList<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali) {
         nakyma = new Verkkonakyma(verkko);
         g = nakyma.getGraphics();
@@ -66,10 +85,24 @@ by following parent pointers
         alkupiste.setF_arvo(F_arvo);
         alkupiste.setEdeltaja(null);
         avoinLista.LisaaListaan(alkupiste);
-        
+        Solmu tmp = maali;
         while (avoinLista.ListanKoko() != 0) {
             Solmu nykyinen = avoinLista.AnnaSolmu();
-             suljettuLista.add(nykyinen);
+            suljettuLista.add(nykyinen);
+
+            // piirretään verkkoa 
+            ArrayList<Solmu> nykyinenPiirrettava = new ArrayList<>();
+            nykyinenPiirrettava.add(nykyinen);
+            nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
+
+            Solmu liikkunutMaali = LiikutaMaalia(tmp);
+            ArrayList<Solmu> maaliPiirrettava = new ArrayList<>();
+            maaliPiirrettava.add(liikkunutMaali);
+            maali.setMaali(false);
+            maaliPiirrettava.add(maali);
+            nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
+            System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
+            tmp = liikkunutMaali;
             if (nykyinen.isMaali()) {
                 System.out.println("Tulostetaan polku:");
                 kuljettuReitti = tulostaPolku(nykyinen);
@@ -83,7 +116,7 @@ by following parent pointers
                     continue;
                 }
 
-                int kokeiltava_G_arvo = nykyinen.getG_arvo()+ annaEtaisyys(nykyinen, naapuri);
+                int kokeiltava_G_arvo = nykyinen.getG_arvo() + annaEtaisyys(nykyinen, naapuri);
                 System.out.println(" Alustava G: " + kokeiltava_G_arvo);
                 //if neighbor in OPEN and cost less than g(neighbor):
                 if (avoinLista.AnnaSolmunIndeksi(naapuri) != -1 && kokeiltava_G_arvo < naapuri.getG_arvo()) {
@@ -96,40 +129,67 @@ by following parent pointers
                     suljettuLista.remove(naapuri);
                 }
                 //if neighbor not in OPEN and neighbor not in CLOSED:
-                if(avoinLista.AnnaSolmunIndeksi(naapuri) == -1 && !suljettuLista.contains(naapuri)){
+                if (avoinLista.AnnaSolmunIndeksi(naapuri) == -1 && !suljettuLista.contains(naapuri)) {
 //                    set g(neighbor) to cost
 //      add neighbor to OPEN
 //      set priority queue rank to g(neighbor) + h(neighbor)
 //      set neighbor's parent to current
                     naapuri.setG_arvo(kokeiltava_G_arvo);
-                    naapuri.setF_arvo(kokeiltava_G_arvo + laskeHeuristinenArvio(naapuri, maali));
+                    naapuri.setF_arvo(kokeiltava_G_arvo + laskeHeuristinenArvio(naapuri, liikkunutMaali));
                     naapuri.setEdeltaja(nykyinen);
                     avoinLista.LisaaListaan(naapuri);
                 }
-                
+
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
-            
+
         }
         return null;
+    }
+
+    private Solmu LiikutaMaalia(Solmu vanhaMaali) {
+        int max = this.verkko.Solmut.length-1;
+        Random rand = new Random();
+        int x = 1 - rand.nextInt(3);
+        int y = 1 - rand.nextInt(3);
+        int uusiX = vanhaMaali.getX() + x;
+        int uusiY = vanhaMaali.getY() + y; // + y;
+        if (uusiX > max) {
+            uusiX = max;
+        }
+        if (uusiY > max) {
+            uusiY = max;
+        }
+        if (uusiX < 0) {
+            uusiX = 0;
+        }
+        if (uusiY < 0) {
+            uusiY = 0;
+        }
+        System.out.println("Random " + x + " -- " + y);
+        Solmu uusiMaali = new Solmu(uusiX, uusiY, false);
+        uusiMaali.setMaali(true);
+        vanhaMaali.setMaali(false);
+         verkko.AsetaMaalinSijainti(uusiX, uusiY);
+        return uusiMaali;
     }
 
     private int laskeHeuristinenArvio(Solmu alku, Solmu maali) {
         int etaisyysX = Math.abs(maali.getX() - alku.getX());
         int etaisyysY = Math.abs(maali.getY() - alku.getY());
-                if (etaisyysX < 0) {
+        if (etaisyysX < 0) {
             etaisyysX *= -1;
         }
         if (etaisyysY < 0) {
             etaisyysY *= -1;
         }
         int summa = etaisyysX + etaisyysY;
-        System.out.println("F : etaisyysX: "+etaisyysX + " etaisyysY: "+etaisyysY + " -> " + summa);
+        System.out.println("F : etaisyysX: " + etaisyysX + " etaisyysY: " + etaisyysY + " -> " + summa);
         return summa;
     }
 
@@ -138,15 +198,13 @@ by following parent pointers
         System.out.println("Maali: " + maali.getX() + "," + maali.getY());
         Solmu nykyinen = maali;
         boolean alussa = false;
-        while(!nykyinen.OnAlkupiste)
-        {
-            System.out.println(" -> " +nykyinen.toString());
+        while (!nykyinen.OnAlkupiste) {
+            System.out.println(" -> " + nykyinen.toString());
             polku.add(nykyinen);
             Solmu edeltaja = nykyinen.getEdeltaja();
             nykyinen = edeltaja;
         }
-        
-        
+
 //        for (Solmu lista1 : lista) {
 //            System.out.println("-->" + lista1.getX() + "," + lista1.getY() + " F:" + lista1.getF_arvo() + " G:" + lista1.getG_arvo());
 //        }
@@ -159,7 +217,6 @@ by following parent pointers
 //            }
 //            nykyinen = solmu;
 //        }
-        
         return polku;
     }
 
@@ -170,7 +227,7 @@ by following parent pointers
         int minX = 0;
         int minY = 0;
 
-        int maxX = this.verkko.Solmut.length-1;
+        int maxX = this.verkko.Solmut.length - 1;
         int maxY = maxX;
         if (minX < solmuX - 1) {
             minX = solmuX - 1;
@@ -190,7 +247,9 @@ by following parent pointers
                     continue; // ei lisätä solmua naapuriensa joukkoon
                 }
                 Solmu naapurisolmu = this.verkko.Solmut[i][j];
-                if(naapurisolmu.OnAlkupiste){continue;}
+                if (naapurisolmu.OnAlkupiste) {
+                    continue;
+                }
                 if (!naapurisolmu.OnEste) {
                     naapurit.add(naapurisolmu);
                 }
@@ -213,7 +272,7 @@ by following parent pointers
     }
 
     class Prioriteettijono {
-        
+
         public ArrayList<Solmu> getLista() {
             if (lista != null) {
                 return lista;
@@ -226,8 +285,8 @@ by following parent pointers
         int pieninKustannus = 0;
 
         public void LisaaListaan(Solmu lisattava) {
-            System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: " + 
-                    lisattava.getG_arvo());
+            System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: "
+                    + lisattava.getG_arvo());
             lista = this.getLista();
             lista.add(lisattava);
         }
@@ -237,7 +296,7 @@ by following parent pointers
             int palautettavanIndeksi = -1;
             for (int i = 0; i < lista.size(); i++) {
                 Solmu kandidaatti = lista.get(i);
-                if (kandidaatti.getF_arvo()< pieninKustannus) {
+                if (kandidaatti.getF_arvo() < pieninKustannus) {
                     pieninKustannus = kandidaatti.getF_arvo();
                     palautettavanIndeksi = i;
                 }

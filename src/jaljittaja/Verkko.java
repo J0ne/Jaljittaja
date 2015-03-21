@@ -13,12 +13,22 @@ package jaljittaja;
  */
 public class Verkko {
 
+    /**
+     *
+     * @param sivu
+     * @param alkupiste
+     * @param maali
+     */
     public Verkko(int sivu, Solmu alkupiste, Solmu maali) {
         RakennaVerkko(sivu, alkupiste, maali);
+        this.maali = maali;
     }
 
+    /**
+     *
+     */
     public Solmu[][] Solmut;
-
+    public Solmu maali;
     private Verkko RakennaVerkko(int n, Solmu alkupiste, Solmu maali) {
 
         int x = n;
@@ -36,7 +46,7 @@ public class Verkko {
                 Solmut[i][j].setMaali(true);
                 }
                 //luodaan este
-                if (j >= 2 && j % 7 == 0 && (i > 0 && i < n-3) ||
+                if ((j >= 2 && j % 7 == 0 && i %3 == 0 )&& (i > 0 && i < n-3) ||
                         (j > 2 && j < n-3 && i== 8)
                         || (j >= 5 && j < n-1 && i== 2)) {
                     Solmut[i][j].OnEste = true;
@@ -44,6 +54,18 @@ public class Verkko {
             }
         }
         return this;
+    }
+    
+    public void AsetaMaalinSijainti(int x, int y){
+        
+        if(!this.Solmut[x][y].isOnEste()){
+            this.Solmut[this.maali.getX()][this.maali.getY()].setMaali(false);
+            this.maali = this.Solmut[x][y];
+            this.Solmut[x][y].setMaali(true);
+        }
+        
+        else
+            return;
     }
 
 }

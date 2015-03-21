@@ -9,6 +9,7 @@ import jaljittaja.Solmu;
 import jaljittaja.Verkko;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -27,8 +28,8 @@ import java.util.logging.Logger;
  */
 public class Verkkonakyma extends Frame {
 
-    private final int PITUUS = 40;
-    private final int KORKEUS = 30;
+    private final int PITUUS = 45;
+    private final int KORKEUS = 35;
 
     /**
      *
@@ -37,7 +38,7 @@ public class Verkkonakyma extends Frame {
     public Verkkonakyma(Verkko verkko) {
         super("Jäljittaja");
         this.verkko = verkko;
-        setSize(900, 900);
+        setSize(1200, 900);
         setVisible(true);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -46,7 +47,7 @@ public class Verkkonakyma extends Frame {
             }
         });
     }
-    final static BasicStroke stroke = new BasicStroke(3);
+    final static BasicStroke stroke = new BasicStroke(2);
 
     @Override
     public void paint(Graphics g) {
@@ -91,11 +92,13 @@ public class Verkkonakyma extends Frame {
                 String nimi = solmu.getX() + "," + solmu.getY();
                 for (Solmu s : solmut) {
                     //System.out.println("X: " +s.getX() +", Y: " + s.getY() + " -> i: " + tempI + ", j: " + tempJ);
-                    if (s.getX() == tempI && s.getY() == tempJ) {
-                        if(!s.Maali){
+                    if (s.getX() == tempI && s.getY() == tempJ && !solmu.OnEste) {
+                        if (!s.isMaali()) {
                             PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), tila);
                         }
-                        
+                        else{
+                            PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), 4);
+                        }
 
                     }
                 }
@@ -129,8 +132,8 @@ public class Verkkonakyma extends Frame {
     }
 
     private void PiirraSolmu(Graphics2D g2d, int x, int y, String id, int state) {
-        int x1 = 250 + x;
-        int y1 = 250 + y;
+        int x1 = 150 + x;
+        int y1 = 150 + y;
         Color color;
         switch (state) {
             case 1:
@@ -145,6 +148,9 @@ public class Verkkonakyma extends Frame {
             case 4:
                 color = Color.YELLOW;
                 break;
+            case 5:
+                color = Color.ORANGE;
+                break;
             case 10:
                 color = Color.BLACK;
                 break;
@@ -154,11 +160,11 @@ public class Verkkonakyma extends Frame {
         }
         if (state > 0) {
             g2d.setPaint(color);
-            g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 12, KORKEUS - 12));
+            g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 4, KORKEUS - 4));
             g2d.drawRect(x1, y1, PITUUS, KORKEUS);
         }
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(x1, y1, PITUUS, KORKEUS);
-        g2d.drawString(id, x1 + 5, y1 + 25);
+        g2d.drawRect(x1, y1, PITUUS, KORKEUS);;
+        g2d.drawString(id, x1 + 10, y1 + 25);
     }
 }

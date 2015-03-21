@@ -23,10 +23,10 @@ public class Jaljittaja {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Solmu alkupiste = new Solmu(3, 6, false, true);
-        Solmu maali = new Solmu(14, 12, false);
-        
-        Verkko matriisi = new Verkko(15, alkupiste, maali);
+        Solmu alkupiste = new Solmu(1, 6, false, true);
+        Solmu maali = new Solmu(7, 4, false);
+        maali.setMaali(true);
+        Verkko matriisi = new Verkko(10, alkupiste, maali);
         
         Polunetsija etsija = new Polunetsija(matriisi);        
         etsija.EtsiLyhinPolku(alkupiste, maali);
