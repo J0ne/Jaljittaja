@@ -27,8 +27,8 @@ import java.util.logging.Logger;
  */
 public class Verkkonakyma extends Frame {
 
-    private final int PITUUS = 50;
-    private final int KORKEUS = 40;
+    private final int PITUUS = 40;
+    private final int KORKEUS = 30;
 
     /**
      *
@@ -37,7 +37,7 @@ public class Verkkonakyma extends Frame {
     public Verkkonakyma(Verkko verkko) {
         super("Jäljittaja");
         this.verkko = verkko;
-        setSize(800, 800);
+        setSize(900, 900);
         setVisible(true);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -61,25 +61,26 @@ public class Verkkonakyma extends Frame {
 
                 String nimi = solmu.getX() + "," + solmu.getY();
                 if (solmu.OnEste) {
-                    PiirraSolmu(g2d, j, i, nimi, 10);
-                }
-                else {
-                    PiirraSolmu(g2d, j, i, nimi, 0);
+                    PiirraSolmu(g2d, i, j, nimi, 10);
+                } else {
+                    PiirraSolmu(g2d, i, j, nimi, 0);
                 }
                 if (solmu.OnAlkupiste) {
-                    PiirraSolmu(g2d, j, i, "" + solmu.getG_arvo(), 1);
-                } 
-                j += PITUUS;
+                    PiirraSolmu(g2d, i, j, "" + solmu.getG_arvo(), 3);
+                }
+                if (solmu.Maali) {
+                    PiirraSolmu(g2d, i, j, "" + solmu.getG_arvo(), 4);
+                }
+                j += KORKEUS;
             }
-            i += KORKEUS;
+            i += PITUUS;
         }
     }
 
-    public void PiirraSolmut(ArrayList<Solmu> solmut, Graphics g, int state) {
+    public void PiirraSolmut(ArrayList<Solmu> solmut, Graphics g, int tila) {
         Graphics2D g2d = (Graphics2D) g;
-        
+
         int i = 0;
-        int vari = 0;
         int tempI = 0;
 
         for (Solmu[] rivi : this.verkko.Solmut) {
@@ -91,13 +92,17 @@ public class Verkkonakyma extends Frame {
                 for (Solmu s : solmut) {
                     //System.out.println("X: " +s.getX() +", Y: " + s.getY() + " -> i: " + tempI + ", j: " + tempJ);
                     if (s.getX() == tempI && s.getY() == tempJ) {
-                        PiirraSolmu(g2d, j, i, "" + s.getG_arvo(), state);
+                        if(!s.Maali){
+                            PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), tila);
+                        }
+                        
+
                     }
                 }
-                j += PITUUS;
+                j += KORKEUS;
                 tempJ++;
             }
-            i += KORKEUS;
+            i += PITUUS;
             tempI++;
         }
 
@@ -133,6 +138,12 @@ public class Verkkonakyma extends Frame {
                 break;
             case 2:
                 color = Color.MAGENTA;
+                break;
+            case 3:
+                color = Color.GREEN;
+                break;
+            case 4:
+                color = Color.YELLOW;
                 break;
             case 10:
                 color = Color.BLACK;

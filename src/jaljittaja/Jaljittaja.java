@@ -23,11 +23,13 @@ public class Jaljittaja {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Verkko matriisi = new Verkko(10);
+        Solmu alkupiste = new Solmu(3, 6, false, true);
+        Solmu maali = new Solmu(14, 12, false);
         
-        Polunetsija etsija = new Polunetsija(matriisi);
+        Verkko matriisi = new Verkko(15, alkupiste, maali);
         
-        etsija.EtsiLyhinPolku(new Solmu(1, 0, false, true), new Solmu(6, 9, false));
+        Polunetsija etsija = new Polunetsija(matriisi);        
+        etsija.EtsiLyhinPolku(alkupiste, maali);
         
         //Verkkonakyma vn = new Verkkonakyma(matriisi);
         

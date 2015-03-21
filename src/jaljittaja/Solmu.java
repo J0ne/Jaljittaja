@@ -46,8 +46,11 @@ public class Solmu {
         return OnEste;
     }
 
-    public void setOnEste(boolean OnEste) {
-        this.OnEste = OnEste;
+    public void setOnEste(boolean val) {
+        if(this.OnAlkupiste){
+            val = false;
+        }
+        this.OnEste = val;
     }
     
     
@@ -57,8 +60,26 @@ public class Solmu {
     
     public Solmu Edeltaja;
 
+    public boolean isMaali() {
+        return Maali;
+    }
+
+    public void setMaali(boolean Maali) {
+        if(Maali && OnEste){this.OnEste = false;}
+        this.Maali = Maali;
+    }
+    
+    public boolean Maali;
+
     public boolean isOnAlkupiste() {
         return OnAlkupiste;
+    }
+
+    public void setOnAlkupiste(boolean OnAlkupiste) {
+        if(OnAlkupiste){
+            OnEste = false;
+        }
+        this.OnAlkupiste = OnAlkupiste;
     }
     
     public boolean OnAlkupiste;
@@ -84,9 +105,24 @@ public class Solmu {
     }
 
     public void setF_arvo(int F_arvo) {
+        System.out.println("Asetetaan F: " + F_arvo);
         this.F_arvo = F_arvo;
     }
     
     public int G_arvo;
     public int F_arvo;
+
+    @Override
+    public String toString() {
+        if(this.isMaali()){
+            return "MAALI!";
+        }
+        if(this.isOnAlkupiste()){
+            return "ALKUPISTE";
+        }
+        return "Solmu{" + "x=" + this.getX() + ", y=" + getY() + " G:" + this.getG_arvo() +
+                " F:" + this.getF_arvo() + '}';
+    }
+    
+    
 }

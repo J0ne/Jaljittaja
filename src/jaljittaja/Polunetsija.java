@@ -21,7 +21,28 @@ import java.util.logging.Logger;
  * @author jouni
  */
 public class Polunetsija { 
+/*
+    OPEN = priority queue containing START
+CLOSED = empty set
+while lowest rank in OPEN is not the GOAL:
+  current = remove lowest rank item from OPEN
+  add current to CLOSED
+  for neighbors of current:
+    cost = g(current) + movementcost(current, neighbor)
+    if neighbor in OPEN and cost less than g(neighbor):
+      remove neighbor from OPEN, because new path is better
+    if neighbor in CLOSED and cost less than g(neighbor): **
+      remove neighbor from CLOSED
+    if neighbor not in OPEN and neighbor not in CLOSED:
+      set g(neighbor) to cost
+      add neighbor to OPEN
+      set priority queue rank to g(neighbor) + h(neighbor)
+      set neighbor's parent to current
 
+reconstruct reverse path from goal to start
+by following parent pointers
+    
+    */
     public Polunetsija(Verkko verkko) {
         this.verkko = verkko;
     }
@@ -45,19 +66,16 @@ public class Polunetsija {
         alkupiste.setF_arvo(F_arvo);
         alkupiste.setEdeltaja(null);
         avoinLista.LisaaListaan(alkupiste);
+        
         while (avoinLista.ListanKoko() != 0) {
             Solmu nykyinen = avoinLista.AnnaSolmu();
-
-            if (nykyinen.getX() == maali.getX() && nykyinen.getY() == maali.getY()) {
+             suljettuLista.add(nykyinen);
+            if (nykyinen.isMaali()) {
                 System.out.println("Tulostetaan polku:");
-                return tulostaPolku(kuljettuReitti, nykyinen);
-                
-                
-                
+                kuljettuReitti = tulostaPolku(nykyinen);
+                nakyma.PiirraSolmut(kuljettuReitti, g, 1);
+                return kuljettuReitti;
             }
-            avoinLista.PoistaSolmu(nykyinen);
-            suljettuLista.add(nykyinen);
-
             ArrayList<Solmu> naapuriSolmut = annaSolmunNaapurit(nykyinen);
             nakyma.PiirraSolmut(naapuriSolmut, g, 2);
             for (Solmu naapuri : naapuriSolmut) {
@@ -65,26 +83,30 @@ public class Polunetsija {
                     continue;
                 }
 
-                int alustava_G_arvo = nykyinen.getG_arvo()+ annaEtaisyys(nykyinen, naapuri);
-                /*
-                 if neighbor not in openset or tentative_g_score < g_score[neighbor] 
-                 came_from[neighbor] := current
-                 g_score[neighbor] := tentative_g_score
-                 f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
-                 if neighbor not in openset
-                 add neighbor to openset
-                 */
-                if (avoinLista.AnnaSolmunIndeksi(naapuri) == -1 || alustava_G_arvo < naapuri.getG_arvo()) {
-                    kuljettuReitti.remove(naapuri);
-                    kuljettuReitti.add(nykyinen);
-                    //naapuri.setEdeltaja(nykyinen);
-                    naapuri.setG_arvo(alustava_G_arvo);
-                    naapuri.setF_arvo(alustava_G_arvo + laskeHeuristinenArvio(naapuri, maali));
-                    if (avoinLista.AnnaSolmunIndeksi(naapuri) == -1) {
-                        naapuri.setEdeltaja(nykyinen);
-                        avoinLista.LisaaListaan(naapuri);
-                    }
+                int kokeiltava_G_arvo = nykyinen.getG_arvo()+ annaEtaisyys(nykyinen, naapuri);
+                System.out.println(" Alustava G: " + kokeiltava_G_arvo);
+                //if neighbor in OPEN and cost less than g(neighbor):
+                if (avoinLista.AnnaSolmunIndeksi(naapuri) != -1 && kokeiltava_G_arvo < naapuri.getG_arvo()) {
+                    //remove neighbor from OPEN, because new path is better
+                    avoinLista.PoistaSolmu(naapuri);
                 }
+                //if neighbor in CLOSED and cost less than g(neighbor): **
+                if (suljettuLista.contains(naapuri) && kokeiltava_G_arvo < naapuri.getG_arvo()) {
+                    //remove neighbor from CLOSED
+                    suljettuLista.remove(naapuri);
+                }
+                //if neighbor not in OPEN and neighbor not in CLOSED:
+                if(avoinLista.AnnaSolmunIndeksi(naapuri) == -1 && !suljettuLista.contains(naapuri)){
+//                    set g(neighbor) to cost
+//      add neighbor to OPEN
+//      set priority queue rank to g(neighbor) + h(neighbor)
+//      set neighbor's parent to current
+                    naapuri.setG_arvo(kokeiltava_G_arvo);
+                    naapuri.setF_arvo(kokeiltava_G_arvo + laskeHeuristinenArvio(naapuri, maali));
+                    naapuri.setEdeltaja(nykyinen);
+                    avoinLista.LisaaListaan(naapuri);
+                }
+                
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ex) {
@@ -106,15 +128,28 @@ public class Polunetsija {
         if (etaisyysY < 0) {
             etaisyysY *= -1;
         }
-        return etaisyysX + etaisyysY;
+        int summa = etaisyysX + etaisyysY;
+        System.out.println("F : etaisyysX: "+etaisyysX + " etaisyysY: "+etaisyysY + " -> " + summa);
+        return summa;
     }
 
-    private ArrayList<Solmu> tulostaPolku(ArrayList<Solmu> lista, Solmu maali) {
+    private ArrayList<Solmu> tulostaPolku(Solmu maali) {
         ArrayList<Solmu> polku = new ArrayList<>();
         System.out.println("Maali: " + maali.getX() + "," + maali.getY());
-        for (Solmu lista1 : lista) {
-            System.out.println("-->" + lista1.getX() + "," + lista1.getY());
+        Solmu nykyinen = maali;
+        boolean alussa = false;
+        while(!nykyinen.OnAlkupiste)
+        {
+            System.out.println(" -> " +nykyinen.toString());
+            polku.add(nykyinen);
+            Solmu edeltaja = nykyinen.getEdeltaja();
+            nykyinen = edeltaja;
         }
+        
+        
+//        for (Solmu lista1 : lista) {
+//            System.out.println("-->" + lista1.getX() + "," + lista1.getY() + " F:" + lista1.getF_arvo() + " G:" + lista1.getG_arvo());
+//        }
 //        polku.add(nykyinen);
 //        while (nykyinen != null) {
 //            Solmu solmu = nykyinen.getEdeltaja();
@@ -157,7 +192,6 @@ public class Polunetsija {
                 Solmu naapurisolmu = this.verkko.Solmut[i][j];
                 if(naapurisolmu.OnAlkupiste){continue;}
                 if (!naapurisolmu.OnEste) {
-                    naapurisolmu.setEdeltaja(solmu);
                     naapurit.add(naapurisolmu);
                 }
 
@@ -192,6 +226,8 @@ public class Polunetsija {
         int pieninKustannus = 0;
 
         public void LisaaListaan(Solmu lisattava) {
+            System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: " + 
+                    lisattava.getG_arvo());
             lista = this.getLista();
             lista.add(lisattava);
         }
@@ -208,6 +244,7 @@ public class Polunetsija {
 
             }
             Solmu palautettava = lista.get(palautettavanIndeksi);
+            lista.remove(palautettavanIndeksi);
             return palautettava;
         }
         ArrayList<Solmu> lista;
