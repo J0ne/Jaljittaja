@@ -18,35 +18,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Luokka toteuttaa polunetsintäalgoritmin, sekä kaikki sen tarvitsemat tietorakenteet ja apumetodit
  * @author jouni
  */
 public class Polunetsija {
-    /*
-     OPEN = priority queue containing START
-     CLOSED = empty set
-     while lowest rank in OPEN is not the GOAL:
-     current = remove lowest rank item from OPEN
-     add current to CLOSED
-     for neighbors of current:
-     cost = g(current) + movementcost(current, neighbor)
-     if neighbor in OPEN and cost less than g(neighbor):
-     remove neighbor from OPEN, because new path is better
-     if neighbor in CLOSED and cost less than g(neighbor): **
-     remove neighbor from CLOSED
-     if neighbor not in OPEN and neighbor not in CLOSED:
-     set g(neighbor) to cost
-     add neighbor to OPEN
-     set priority queue rank to g(neighbor) + h(neighbor)
-     set neighbor's parent to current
-
-     reconstruct reverse path from goal to start
-     by following parent pointers
-    
-     */
 
     /**
-     *
+     * Konstruktori joka saa parametriä verkon
      * @param verkko
      */
     public Polunetsija(Verkko verkko) {
@@ -54,18 +32,19 @@ public class Polunetsija {
     }
 
     /**
-     *
+     * Verkko
      */
     public Verkko verkko;
 
     /**
-     *
+     * Verkkonäkymä. Tämän avulla voidaan havainnollistaa algortimin suorituksen etenemistä
      */
     public Verkkonakyma nakyma;
     Graphics g;
 
     /**
-     *
+     * Metodi joka etsii lyhyimmän polun pisteestä A pisteeseen B.
+     * 
      * @param alkupiste
      * @param maali
      * @return
@@ -81,7 +60,6 @@ public class Polunetsija {
 
         int G_arvo = 0;
         int F_arvo = G_arvo + laskeHeuristinenArvio(alkupiste, maali);
-        alkupiste.setKustannus(F_arvo);
         alkupiste.setF_arvo(F_arvo);
         alkupiste.setEdeltaja(null);
         avoinLista.LisaaListaan(alkupiste);
@@ -141,7 +119,7 @@ public class Polunetsija {
                 }
 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -204,19 +182,6 @@ public class Polunetsija {
             Solmu edeltaja = nykyinen.getEdeltaja();
             nykyinen = edeltaja;
         }
-
-//        for (Solmu lista1 : lista) {
-//            System.out.println("-->" + lista1.getX() + "," + lista1.getY() + " F:" + lista1.getF_arvo() + " G:" + lista1.getG_arvo());
-//        }
-//        polku.add(nykyinen);
-//        while (nykyinen != null) {
-//            Solmu solmu = nykyinen.getEdeltaja();
-//            if (solmu != null) {
-//                polku.add(solmu);
-//                System.out.println("-->" + solmu.getX() + "," + solmu.getY());
-//            }
-//            nykyinen = solmu;
-//        }
         return polku;
     }
 
@@ -271,6 +236,7 @@ public class Polunetsija {
         return etaisyysX + etaisyysY;
     }
 
+    
     class Prioriteettijono {
 
         public ArrayList<Solmu> getLista() {

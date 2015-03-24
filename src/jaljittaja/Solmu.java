@@ -13,7 +13,7 @@ package jaljittaja;
 public class Solmu {
 
     /**
-     *
+     * Konstruktori
      * @param x
      * @param y
      * @param OnEste
@@ -25,7 +25,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Konstruktori
      * @param x
      * @param y
      * @param OnEste
@@ -39,7 +39,7 @@ public class Solmu {
     }
     
     /**
-     *
+     * 
      * @return
      */
     public int getX() {
@@ -55,33 +55,18 @@ public class Solmu {
     }
 
     /**
-     *
+     * X-koordinaatti
      */
     public int x;
 
     /**
-     *
+     * Y-koordinaatti
      */
     public int y;
 
-    /**
-     *
-     * @return
-     */
-    public int getKustannus() {
-        return Kustannus;
-    }
 
     /**
-     *
-     * @param Kustannus
-     */
-    public void setKustannus(int Kustannus) {
-        this.Kustannus = Kustannus;
-    }
-
-    /**
-     *
+     * Metodi jolla tutkitaan, onko kyseinen solmun instanssi este
      * @return
      */
     public boolean isOnEste() {
@@ -89,7 +74,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Metodi, jolla solmu voidaan asettaa esteen rooliin.
      * @param val
      */
     public void setOnEste(boolean val) {
@@ -100,22 +85,18 @@ public class Solmu {
     }
     
     /**
-     *
-     */
-    public int Kustannus;
-    
-    /**
-     *
+     * 
      */
     public boolean OnEste;
     
     /**
-     *
+     * Solmua edeltävä solmu löydetyssä polussa
      */
     public Solmu Edeltaja;
 
     /**
-     *
+     * Palauttaa tiedon siitä, onko kyseessä maali, eli piste B.
+     * Polunetsinnän kohde
      * @return
      */
     public boolean isMaali() {
@@ -123,7 +104,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Solmun asetus maaliksi.
      * @param Maali
      */
     public void setMaali(boolean Maali) {
@@ -132,12 +113,12 @@ public class Solmu {
     }
     
     /**
-     *
+     * Solmun erikoistapaus: maali, eli piste B.
      */
     public boolean Maali;
 
     /**
-     *
+     * Polunetsinnän lähtöpiste, piste A
      * @return
      */
     public boolean isOnAlkupiste() {
@@ -145,7 +126,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Alkupisteen asetus. Alkupisteellä ei voi olla edeltäjää.
      * @param OnAlkupiste
      */
     public void setOnAlkupiste(boolean OnAlkupiste) {
@@ -156,12 +137,12 @@ public class Solmu {
     }
     
     /**
-     *
+     * Palauttaa tiedon, onko Solmu alkupiste, eli piste A
      */
     public boolean OnAlkupiste;
 
     /**
-     *
+     * Palauttaa solmun edeltäjäsolmun
      * @return
      */
     public Solmu getEdeltaja() {
@@ -169,7 +150,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Asettaa solmun edeltäjän
      * @param Edeltaja
      */
     public void setEdeltaja(Solmu Edeltaja) {
@@ -177,7 +158,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Palauttaa solmulle lasketun G-arvon.
      * @return
      */
     public int getG_arvo() {
@@ -185,7 +166,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Asettaa solmun G-arvon
      * @param G_arvo
      */
     public void setG_arvo(int G_arvo) {
@@ -193,7 +174,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Palauttaa solmun F-arvon.
      * @return
      */
     public int getF_arvo() {
@@ -201,7 +182,7 @@ public class Solmu {
     }
 
     /**
-     *
+     * Asettaa F-arvon
      * @param F_arvo
      */
     public void setF_arvo(int F_arvo) {
@@ -210,12 +191,12 @@ public class Solmu {
     }
     
     /**
-     *
+     * G-arvo
      */
     public int G_arvo;
 
     /**
-     *
+     * F-arvo
      */
     public int F_arvo;
 

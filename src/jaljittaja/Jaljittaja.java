@@ -19,14 +19,15 @@ import sun.awt.X11.XConstants;
 public class Jaljittaja {
 
     /**
+     * Pääohjelma
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
         Solmu alkupiste = new Solmu(1, 6, false, true);
-        Solmu maali = new Solmu(7, 4, false);
+        Solmu maali = new Solmu(15, 4, false);
         maali.setMaali(true);
-        Verkko matriisi = new Verkko(10, alkupiste, maali);
+        Verkko matriisi = new Verkko(20, alkupiste, maali);
         
         Polunetsija etsija = new Polunetsija(matriisi);        
         etsija.EtsiLyhinPolku(alkupiste, maali);

@@ -14,7 +14,7 @@ package jaljittaja;
 public class Verkko {
 
     /**
-     *
+     * Konstruktori
      * @param sivu
      * @param alkupiste
      * @param maali
@@ -25,9 +25,13 @@ public class Verkko {
     }
 
     /**
-     *
+     * Matriisi, jossa kaikki verkon solmut
      */
     public Solmu[][] Solmut;
+
+    /**
+     * Verkon päätepiste, piste B, eli "maali"
+     */
     public Solmu maali;
     private Verkko RakennaVerkko(int n, Solmu alkupiste, Solmu maali) {
 
@@ -56,6 +60,11 @@ public class Verkko {
         return this;
     }
     
+    /**
+     * Asettaa maalin, eli polunetsinnän päätepisteen.
+     * @param x
+     * @param y
+     */
     public void AsetaMaalinSijainti(int x, int y){
         
         if(!this.Solmut[x][y].isOnEste()){
