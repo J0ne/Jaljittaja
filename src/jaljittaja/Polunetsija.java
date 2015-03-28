@@ -7,13 +7,8 @@ package jaljittaja;
 
 import jaljittajaUI.Verkkonakyma;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -244,56 +239,6 @@ public class Polunetsija {
             etaisyysY *= -1;
         }
         return etaisyysX + etaisyysY;
-    }
-
-    class Prioriteettijono {
-
-        public ArrayList<Solmu> getLista() {
-            if (lista != null) {
-                return lista;
-            } else {
-                lista = new ArrayList<>();
-                return lista;
-            }
-        }
-
-        int pieninKustannus = 0;
-
-        public void LisaaListaan(Solmu lisattava) {
-            System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: "
-                    + lisattava.getG_arvo());
-            lista = this.getLista();
-            lista.add(lisattava);
-        }
-
-        public Solmu AnnaSolmu() {
-            int pieninKustannus = 1000;
-            int palautettavanIndeksi = -1;
-            for (int i = 0; i < lista.size(); i++) {
-                Solmu kandidaatti = lista.get(i);
-                if (kandidaatti.getF_arvo() < pieninKustannus) {
-                    pieninKustannus = kandidaatti.getF_arvo();
-                    palautettavanIndeksi = i;
-                }
-
-            }
-            Solmu palautettava = lista.get(palautettavanIndeksi);
-            lista.remove(palautettavanIndeksi);
-            return palautettava;
-        }
-        ArrayList<Solmu> lista;
-
-        public void PoistaSolmu(Solmu solmu) {
-            lista.remove(solmu);
-        }
-
-        public int ListanKoko() {
-            return lista.size();
-        }
-
-        public int AnnaSolmunIndeksi(Solmu solmu) {
-            return lista.indexOf(solmu);
-        }
     }
 
 }

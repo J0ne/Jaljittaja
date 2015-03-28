@@ -5,6 +5,7 @@
  */
 package jaljittajaUI;
 
+import jaljittaja.Jaljittaja;
 import jaljittaja.Solmu;
 import jaljittaja.Verkko;
 import java.awt.BasicStroke;
@@ -13,20 +14,27 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.LayoutManager;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
  * @author jouni
  */
-public class Verkkonakyma extends Frame {
+public class Verkkonakyma extends JFrame {
 
     private final int PITUUS = 45;
     private final int KORKEUS = 35;
@@ -40,6 +48,23 @@ public class Verkkonakyma extends Frame {
         this.verkko = verkko;
         setSize(1200, 900);
         setVisible(true);
+        
+        JPanel jpanel = new JPanel();
+        jpanel.setAlignmentX(TOP_ALIGNMENT);
+        jpanel.setAlignmentY(TOP_ALIGNMENT);
+        jpanel.setSize(200, 400);
+        JButton start = new JButton("start");
+        start.addActionListener(new ActionListener()
+{
+  public void actionPerformed(ActionEvent e)
+  {
+      
+      
+  }
+});
+        jpanel.add(start);
+        this.add(jpanel);
+        
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 dispose();
@@ -49,6 +74,7 @@ public class Verkkonakyma extends Frame {
     }
     final static BasicStroke stroke = new BasicStroke(2);
 
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -159,12 +185,16 @@ public class Verkkonakyma extends Frame {
                 break;
         }
         if (state > 0) {
+
             g2d.setPaint(color);
-            g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 4, KORKEUS - 4));
+            g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 5, KORKEUS - 5));
             g2d.drawRect(x1, y1, PITUUS, KORKEUS);
         }
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(x1, y1, PITUUS, KORKEUS);;
+        g2d.drawRect(x1, y1, PITUUS, KORKEUS);
+        if(state == 1){
+            g2d.setColor(Color.WHITE);
+        }
         g2d.drawString(id, x1 + 10, y1 + 25);
     }
 }
