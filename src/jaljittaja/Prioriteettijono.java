@@ -14,10 +14,10 @@ import java.util.ArrayList;
 public class Prioriteettijono {
 
     /**
-     *
+     * 
      * @return
      */
-    public ArrayList<Solmu> getLista() {
+    private ArrayList<Solmu> getLista() {
         if (lista != null) {
             return lista;
         } else {
@@ -29,7 +29,7 @@ public class Prioriteettijono {
     int pieninKustannus = 0;
 
     /**
-     *
+     * Lisää alkion listaan
      * @param lisattava
      */
     public void LisaaListaan(Solmu lisattava) {
@@ -40,7 +40,7 @@ public class Prioriteettijono {
     }
 
     /**
-     *
+     * Antaa listan pienimmän F-arvon omaavan solmun ja poistaa sen listasta
      * @return
      */
     public Solmu AnnaSolmu() {
@@ -61,7 +61,7 @@ public class Prioriteettijono {
     ArrayList<Solmu> lista;
 
     /**
-     *
+     * Poistaa parametrina annetun solmun listasta
      * @param solmu
      */
     public void PoistaSolmu(Solmu solmu) {
@@ -69,7 +69,7 @@ public class Prioriteettijono {
     }
 
     /**
-     *
+     * Palauttaa lista koon
      * @return
      */
     public int ListanKoko() {
@@ -77,7 +77,8 @@ public class Prioriteettijono {
     }
 
     /**
-     *
+     * Palauttaa listan indeksin, jossa annettu solmu on. 
+     * Jos solmua ei ole listassa, palauttaa -1
      * @param solmu
      * @return
      */
