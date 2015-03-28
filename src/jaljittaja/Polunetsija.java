@@ -18,13 +18,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Luokka toteuttaa polunetsintäalgoritmin, sekä kaikki sen tarvitsemat tietorakenteet ja apumetodit
+ * Luokka toteuttaa polunetsintäalgoritmin, sekä kaikki sen tarvitsemat
+ * tietorakenteet ja apumetodit
+ *
  * @author jouni
  */
 public class Polunetsija {
 
     /**
      * Konstruktori joka saa parametriä verkon
+     *
      * @param verkko
      */
     public Polunetsija(Verkko verkko) {
@@ -37,19 +40,20 @@ public class Polunetsija {
     public Verkko verkko;
 
     /**
-     * Verkkonäkymä. Tämän avulla voidaan havainnollistaa algortimin suorituksen etenemistä
+     * Verkkonäkymä. Tämän avulla voidaan havainnollistaa algortimin suorituksen
+     * etenemistä
      */
     public Verkkonakyma nakyma;
     Graphics g;
 
     /**
      * Metodi joka etsii lyhyimmän polun pisteestä A pisteeseen B.
-     * 
+     *
      * @param alkupiste
      * @param maali
      * @return
      */
-    public ArrayList<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali) {
+    public ArrayList<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali, boolean liikkuvaMaali) {
         nakyma = new Verkkonakyma(verkko);
         g = nakyma.getGraphics();
 
@@ -73,14 +77,21 @@ public class Polunetsija {
             nykyinenPiirrettava.add(nykyinen);
             nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
 
-            Solmu liikkunutMaali = LiikutaMaalia(tmp);
-            ArrayList<Solmu> maaliPiirrettava = new ArrayList<>();
-            maaliPiirrettava.add(liikkunutMaali);
-            maali.setMaali(false);
-            maaliPiirrettava.add(maali);
-            nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
-            System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
-            tmp = liikkunutMaali;
+            Solmu liikkunutMaali;
+            // maali liikkuu vain ehdollisena
+            if (liikkuvaMaali) {
+                liikkunutMaali = LiikutaMaalia(tmp);
+                ArrayList<Solmu> maaliPiirrettava = new ArrayList<>();
+                maaliPiirrettava.add(liikkunutMaali);
+                maali.setMaali(false);
+                maaliPiirrettava.add(maali);
+                nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
+                System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
+                tmp = liikkunutMaali;
+            } else {
+                liikkunutMaali = tmp;
+            }
+
             if (nykyinen.isMaali()) {
                 System.out.println("Tulostetaan polku:");
                 kuljettuReitti = tulostaPolku(nykyinen);
@@ -119,7 +130,7 @@ public class Polunetsija {
                 }
 
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(20);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -131,7 +142,7 @@ public class Polunetsija {
     }
 
     private Solmu LiikutaMaalia(Solmu vanhaMaali) {
-        int max = this.verkko.Solmut.length-1;
+        int max = this.verkko.Solmut.length - 1;
         Random rand = new Random();
         int x = 1 - rand.nextInt(3);
         int y = 1 - rand.nextInt(3);
@@ -153,7 +164,7 @@ public class Polunetsija {
         Solmu uusiMaali = new Solmu(uusiX, uusiY, false);
         uusiMaali.setMaali(true);
         vanhaMaali.setMaali(false);
-         verkko.AsetaMaalinSijainti(uusiX, uusiY);
+        verkko.AsetaMaalinSijainti(uusiX, uusiY);
         return uusiMaali;
     }
 
@@ -175,8 +186,7 @@ public class Polunetsija {
         ArrayList<Solmu> polku = new ArrayList<>();
         System.out.println("Maali: " + maali.getX() + "," + maali.getY());
         Solmu nykyinen = maali;
-        boolean alussa = false;
-        while (!nykyinen.OnAlkupiste) {
+        while (nykyinen != null) {
             System.out.println(" -> " + nykyinen.toString());
             polku.add(nykyinen);
             Solmu edeltaja = nykyinen.getEdeltaja();
@@ -236,7 +246,6 @@ public class Polunetsija {
         return etaisyysX + etaisyysY;
     }
 
-    
     class Prioriteettijono {
 
         public ArrayList<Solmu> getLista() {

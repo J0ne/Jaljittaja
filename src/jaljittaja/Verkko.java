@@ -23,7 +23,7 @@ public class Verkko {
         RakennaVerkko(sivu, alkupiste, maali);
         this.maali = maali;
     }
-
+    
     /**
      * Matriisi, jossa kaikki verkon solmut
      */
@@ -49,12 +49,12 @@ public class Verkko {
                 if(maali.getX() == i && maali.getY() == j){
                 Solmut[i][j].setMaali(true);
                 }
-                //luodaan este
-                if ((j >= 2 && j % 7 == 0 && i %3 == 0 )&& (i > 0 && i < n-3) ||
-                        (j > 2 && j < n-3 && i== 8)
-                        || (j >= 5 && j < n-1 && i== 2)) {
-                    Solmut[i][j].OnEste = true;
-                }
+//                //luodaan este
+//                if ((j >= 2 && j % 7 == 0 && i %3 == 0 )&& (i > 0 && i < n-3) ||
+//                        (j > 2 && j < n-3 && i== 8)
+//                        || (j >= 5 && j < n-1 && i== 2)) {
+//                    Solmut[i][j].OnEste = true;
+//                }
             }
         }
         return this;
