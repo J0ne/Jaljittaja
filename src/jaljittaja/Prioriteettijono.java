@@ -14,15 +14,14 @@ import java.util.ArrayList;
 public class Prioriteettijono {
 
     /**
-<<<<<<< HEAD
      * 
      * @return
      */
-    private ArrayList<Solmu> getLista() {
+    private Lista<Solmu> getLista() {
         if (lista != null) {
             return lista;
         } else {
-            lista = new ArrayList<>();
+            lista = new Lista<Solmu>();
             return lista;
         }
     }
@@ -37,7 +36,7 @@ public class Prioriteettijono {
         System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: "
                 + lisattava.getG_arvo());
         lista = this.getLista();
-        lista.add(lisattava);
+        lista.Lisaa(lisattava);
     }
 
     /**
@@ -47,26 +46,27 @@ public class Prioriteettijono {
     public Solmu AnnaSolmu() {
         int pieninF_arvo = 1000; // tarpeeksi korkea, joka päivittyy listaa läpi käydessä
         int palautettavanIndeksi = -1;
-        for (int i = 0; i < lista.size(); i++) {
-            Solmu kandidaatti = lista.get(i);
+        for (int i = 0; i < lista.AlkioidenMaara(); i++) {
+            Solmu kandidaatti = lista.AnnaAlkio(i);
             if (kandidaatti.getF_arvo() < pieninF_arvo) {
                 pieninF_arvo = kandidaatti.getF_arvo();
                 palautettavanIndeksi = i;
             }
 
         }
-        Solmu palautettava = lista.get(palautettavanIndeksi);
-        lista.remove(palautettavanIndeksi);
+        Solmu palautettava = lista.AnnaAlkio(palautettavanIndeksi);
+        lista.PoistaListasta(palautettava);
         return palautettava;
     }
-    ArrayList<Solmu> lista;
+    
+    private Lista<Solmu> lista;
 
     /**
      * Poistaa parametrina annetun solmun listasta
      * @param solmu
      */
     public void PoistaSolmu(Solmu solmu) {
-        lista.remove(solmu);
+        lista.PoistaListasta(solmu);
     }
 
     /**
@@ -74,7 +74,7 @@ public class Prioriteettijono {
      * @return
      */
     public int ListanKoko() {
-        return lista.size();
+        return getLista().AlkioidenMaara();
     }
 
     /**
@@ -83,7 +83,7 @@ public class Prioriteettijono {
      * @param solmu
      * @return
      */
-    public int AnnaSolmunIndeksi(Solmu solmu) {
-        return lista.indexOf(solmu);
+    public boolean OnkoJonossa(Solmu solmu) {
+        return lista.OnkoAlkioListassa(solmu);
     }
 }

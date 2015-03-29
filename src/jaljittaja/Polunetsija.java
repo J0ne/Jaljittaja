@@ -103,7 +103,7 @@ public class Polunetsija {
                 int kokeiltava_G_arvo = nykyinen.getG_arvo() + annaEtaisyys(nykyinen, naapuri);
                 System.out.println(" Alustava G: " + kokeiltava_G_arvo);
                 //if neighbor in OPEN and cost less than g(neighbor):
-                if (avoinLista.AnnaSolmunIndeksi(naapuri) != -1 && kokeiltava_G_arvo < naapuri.getG_arvo()) {
+                if (avoinLista.OnkoJonossa(naapuri) & kokeiltava_G_arvo < naapuri.getG_arvo()) {
                     //remove neighbor from OPEN, because new path is better
                     avoinLista.PoistaSolmu(naapuri);
                 }
@@ -113,7 +113,7 @@ public class Polunetsija {
                     suljettuLista.remove(naapuri);
                 }
                 //if neighbor not in OPEN and neighbor not in CLOSED:
-                if (avoinLista.AnnaSolmunIndeksi(naapuri) == -1 && !suljettuLista.contains(naapuri)) {
+                if (!avoinLista.OnkoJonossa(naapuri) && !suljettuLista.contains(naapuri)) {
 //                    set g(neighbor) to cost
 //      add neighbor to OPEN
 //      set priority queue rank to g(neighbor) + h(neighbor)
@@ -163,7 +163,7 @@ public class Polunetsija {
         return uusiMaali;
     }
 
-    private int laskeHeuristinenArvio(Solmu alku, Solmu maali) {
+    protected int laskeHeuristinenArvio(Solmu alku, Solmu maali) {
         int etaisyysX = Math.abs(maali.getX() - alku.getX());
         int etaisyysY = Math.abs(maali.getY() - alku.getY());
         if (etaisyysX < 0) {
