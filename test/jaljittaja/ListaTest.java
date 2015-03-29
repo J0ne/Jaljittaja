@@ -56,7 +56,7 @@ public class ListaTest {
         assertTrue(instance.OnkoAlkioListassa(2));
         assertTrue(instance.OnkoAlkioListassa(3));
         assertTrue(instance.OnkoAlkioListassa(4));
-        instance.toString();
+        System.out.print(instance.toString());
     }
 
     /**
@@ -65,13 +65,18 @@ public class ListaTest {
     @Test
     public void testAnnaAlkio() {
         System.out.println("AnnaAlkio");
-        int indeksi = 0;
-        Lista instance = null;
-        Object expResult = null;
+        int indeksi = 1;
+        Lista instance = new Lista();
+        instance.Lisaa(1);
+        instance.Lisaa(2);
         Object result = instance.AnnaAlkio(indeksi);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(2, result);
+        
+        Solmu solmu = new Solmu(2, 3, false);
+        instance.Lisaa(solmu);
+        
+        result = instance.AnnaAlkio(2);
+        assertEquals(solmu, result);
     }
 
     /**
@@ -102,11 +107,17 @@ public class ListaTest {
     public void testAlkioidenMaara() {
         System.out.println("AlkioidenMaara");
         Lista instance = new Lista();
-        int expResult = 0;
         int result = instance.AlkioidenMaara();
+        assertEquals(0, result);
+        
+        instance.Lisaa("eka");
+        instance.Lisaa("toka");
+        instance.Lisaa(1);
+        
+        int expResult = 3;
+        result = instance.AlkioidenMaara();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -115,11 +126,16 @@ public class ListaTest {
     @Test
     public void testOnkoAlkioListassa() {
         System.out.println("OnkoAlkioListassa");
-        Object alkio = null;
+        Solmu solmu = new Solmu(3, 2, false);
+        Solmu solmu2 = new Solmu(3, 2, false);
         Lista instance = new Lista();
-        boolean expResult = false;
-        boolean result = instance.OnkoAlkioListassa(alkio);
+        instance.Lisaa(solmu);
+        boolean expResult = true;
+        boolean result = instance.OnkoAlkioListassa(solmu);
         assertEquals(expResult, result);
+        // negatiivinen assert - solmu2:a ei lisätty
+        result = instance.OnkoAlkioListassa(solmu2);
+        assertEquals(false, result);
 
     }
 
