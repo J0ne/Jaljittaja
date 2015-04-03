@@ -48,14 +48,14 @@ public class Polunetsija {
      * @param maali
      * @return
      */
-    public ArrayList<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali, boolean liikkuvaMaali) {
+    public Lista<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali, boolean liikkuvaMaali) {
         nakyma = new Verkkonakyma(verkko);
         g = nakyma.getGraphics();
 
         Prioriteettijono avoinLista = new Prioriteettijono(); // open set 
-        ArrayList<Solmu> suljettuLista = new ArrayList<>(); // closed set
+        Lista<Solmu> suljettuLista = new Lista<Solmu>(); // closed set
 
-        ArrayList<Solmu> kuljettuReitti = new ArrayList<>();
+        Lista<Solmu> kuljettuReitti = new Lista<Solmu>();
 
         int G_arvo = 0;
         int F_arvo = G_arvo + laskeHeuristinenArvio(alkupiste, maali);
@@ -65,21 +65,21 @@ public class Polunetsija {
         Solmu tmp = maali;
         while (avoinLista.ListanKoko() != 0) {
             Solmu nykyinen = avoinLista.AnnaSolmu();
-            suljettuLista.add(nykyinen);
+            suljettuLista.Lisaa(nykyinen);
 
             // piirretään verkkoa 
-            ArrayList<Solmu> nykyinenPiirrettava = new ArrayList<>();
-            nykyinenPiirrettava.add(nykyinen);
+            Lista<Solmu> nykyinenPiirrettava = new Lista<Solmu>();
+            nykyinenPiirrettava.Lisaa(nykyinen);
             nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
 
             Solmu liikkunutMaali;
             // maali liikkuu vain ehdollisena
             if (liikkuvaMaali) {
                 liikkunutMaali = LiikutaMaalia(tmp);
-                ArrayList<Solmu> maaliPiirrettava = new ArrayList<>();
-                maaliPiirrettava.add(liikkunutMaali);
+                Lista<Solmu> maaliPiirrettava = new Lista<Solmu>();
+                maaliPiirrettava.Lisaa(liikkunutMaali);
                 maali.setMaali(false);
-                maaliPiirrettava.add(maali);
+                maaliPiirrettava.Lisaa(maali);
                 nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
                 System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
                 tmp = liikkunutMaali;
@@ -93,10 +93,10 @@ public class Polunetsija {
                 nakyma.PiirraSolmut(kuljettuReitti, g, 1);
                 return kuljettuReitti;
             }
-            ArrayList<Solmu> naapuriSolmut = annaSolmunNaapurit(nykyinen);
+            Lista<Solmu> naapuriSolmut = annaSolmunNaapurit(nykyinen);
             nakyma.PiirraSolmut(naapuriSolmut, g, 2);
             for (Solmu naapuri : naapuriSolmut) {
-                if (suljettuLista.contains(naapuri)) {
+                if (suljettuLista.OnkoAlkioListassa(naapuri)) {
                     continue;
                 }
 
@@ -108,12 +108,12 @@ public class Polunetsija {
                     avoinLista.PoistaSolmu(naapuri);
                 }
                 //if neighbor in CLOSED and cost less than g(neighbor): **
-                if (suljettuLista.contains(naapuri) && kokeiltava_G_arvo < naapuri.getG_arvo()) {
+                if (suljettuLista.OnkoAlkioListassa(naapuri) && kokeiltava_G_arvo < naapuri.getG_arvo()) {
                     //remove neighbor from CLOSED
-                    suljettuLista.remove(naapuri);
+                    suljettuLista.PoistaListasta(naapuri);
                 }
                 //if neighbor not in OPEN and neighbor not in CLOSED:
-                if (!avoinLista.OnkoJonossa(naapuri) && !suljettuLista.contains(naapuri)) {
+                if (!avoinLista.OnkoJonossa(naapuri) && !suljettuLista.OnkoAlkioListassa(naapuri)) {
 //                    set g(neighbor) to cost
 //      add neighbor to OPEN
 //      set priority queue rank to g(neighbor) + h(neighbor)
@@ -177,21 +177,21 @@ public class Polunetsija {
         return summa;
     }
 
-    private ArrayList<Solmu> tulostaPolku(Solmu maali) {
-        ArrayList<Solmu> polku = new ArrayList<>();
+    private Lista<Solmu> tulostaPolku(Solmu maali) {
+        Lista<Solmu> polku = new Lista<Solmu>();
         System.out.println("Maali: " + maali.getX() + "," + maali.getY());
         Solmu nykyinen = maali;
         while (nykyinen != null) {
             System.out.println(" -> " + nykyinen.toString());
-            polku.add(nykyinen);
+            polku.Lisaa(nykyinen);
             Solmu edeltaja = nykyinen.getEdeltaja();
             nykyinen = edeltaja;
         }
         return polku;
     }
 
-    private ArrayList<Solmu> annaSolmunNaapurit(Solmu solmu) {
-        ArrayList<Solmu> naapurit = new ArrayList<>();
+    private Lista<Solmu> annaSolmunNaapurit(Solmu solmu) {
+        Lista<Solmu> naapurit = new Lista<Solmu>();
         int solmuX = solmu.getX();
         int solmuY = solmu.getY();
         int minX = 0;
@@ -221,7 +221,7 @@ public class Polunetsija {
                     continue;
                 }
                 if (!naapurisolmu.OnEste) {
-                    naapurit.add(naapurisolmu);
+                    naapurit.Lisaa(naapurisolmu);
                 }
 
             }

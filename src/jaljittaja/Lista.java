@@ -5,13 +5,17 @@
  */
 package jaljittaja;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.lang.Iterable;
+import java.util.Iterator;
 
 /**
  *
  * @author jouni
  */
-public class Lista<E> {
+public class Lista<E> implements Iterable<E>{
     
     private int koko = 0;
     private static final int KAPASITEETTI = 10;
@@ -80,6 +84,18 @@ public class Lista<E> {
         }
         return false;
     }
+    public ArrayList<E> AnnaListaArrayListina(){
+        ArrayList<E> palautettava = new ArrayList<>();
+        for (int i = 0; i < alkiot.length; i++) {
+            Object alkiot1 = alkiot[i];
+            if(alkiot1 != null){
+            palautettava.add((E)alkiot1);
+            }
+        }
+        return palautettava;
+
+
+    }
     
     @Override
     public String toString() {
@@ -90,6 +106,28 @@ public class Lista<E> {
         }
         return "Lista{" + "koko=" + koko + ", alkiot:" + alkiotMjono + '}';
     }
-   
-    
+
+    @Override
+    public Iterator<E> iterator() {
+        Iterator<E> it = new Iterator<E>() {
+
+            private int indeksi = 0;
+
+            @Override
+            public boolean hasNext() {
+                return indeksi < alkiot.length && alkiot[indeksi] != null;
+            }
+
+            @Override
+            public E next() {
+                return (E)alkiot[indeksi++];
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return it;
+    }
 }

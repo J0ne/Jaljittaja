@@ -23,6 +23,8 @@ public class PolunetsijaTest {
     }
     Solmu alkupiste;
     Solmu maali;
+    Polunetsija polunEtsija;
+    
     @BeforeClass
     public static void setUpClass() {
     }
@@ -36,6 +38,8 @@ public class PolunetsijaTest {
         alkupiste = new Solmu(0, 0, false,true);
         maali = new Solmu(4, 4, false);
         maali.setMaali(true);
+        Verkko verkko = new Verkko(5, alkupiste, maali);
+        polunEtsija = new Polunetsija(verkko);
     }
     
     @After
@@ -51,22 +55,22 @@ public class PolunetsijaTest {
         Verkko verkko = new Verkko(5, alkupiste, maali);
         Polunetsija instance = new Polunetsija(verkko);
         
-        ArrayList<Solmu> expResult = new ArrayList<>();
-        expResult.add(verkko.Solmut[4][4]);
-        expResult.add(verkko.Solmut[3][3]);
-        expResult.add(verkko.Solmut[2][2]);
-        expResult.add(verkko.Solmut[1][1]);
-        expResult.add(alkupiste);
+        Lista<Solmu> expResult = new Lista<Solmu>();
+        expResult.Lisaa(verkko.Solmut[4][4]);
+        expResult.Lisaa(verkko.Solmut[3][3]);
+        expResult.Lisaa(verkko.Solmut[2][2]);
+        expResult.Lisaa(verkko.Solmut[1][1]);
+        expResult.Lisaa(alkupiste);
         
-        ArrayList<Solmu> result = instance.EtsiLyhinPolku(alkupiste, maali, false);
+        Lista<Solmu> result = instance.EtsiLyhinPolku(alkupiste, maali, false);
         assertNotNull(result);
-        assertEquals(expResult.size(), result.size());
+        assertEquals(expResult.AlkioidenMaara(), result.AlkioidenMaara());
         VertaileSolmut(expResult, result);
     }
     
-    private void VertaileSolmut(ArrayList<Solmu> listaA, ArrayList<Solmu> listaB){
-        for(int i = 0; i < listaA.size(); i++){
-            assertEquals(listaA.get(i), listaB.get(i));
+    private void VertaileSolmut(Lista<Solmu> listaA, Lista<Solmu> listaB){
+        for(int i = 0; i < listaA.AlkioidenMaara(); i++){
+            assertEquals(listaA.AnnaAlkio(i), listaB.AnnaAlkio(i));
         }
     }
     /* 
@@ -82,4 +86,36 @@ public class PolunetsijaTest {
  O--O--O--O--O--O
 
  */
+
+    /**
+     * Test of laskeHeuristinenArvio method, of class Polunetsija.
+     */
+    @Test
+    public void testLaskeHeuristinenArvio() {
+        System.out.println("laskeHeuristinenArvio");
+        Solmu alku = new Solmu(0, 0, false);
+        
+        Solmu maali = new Solmu(0,1, false);
+        int expResult = 1;
+        int result = polunEtsija.laskeHeuristinenArvio(alku, maali);
+        assertEquals(expResult, result);
+        
+        // uusi maali
+        maali = new Solmu(1,1, false);
+        expResult = 2;
+        result = polunEtsija.laskeHeuristinenArvio(alku, maali);
+        assertEquals(expResult, result);
+        
+         // uusi maali
+        maali = new Solmu(0,4, false);
+        expResult = 4;
+        result = polunEtsija.laskeHeuristinenArvio(alku, maali);
+        assertEquals(expResult, result);
+                maali = new Solmu(0,4, false);
+                         // uusi maali
+        maali = new Solmu(3,4, false);
+        expResult = 7;
+        result = polunEtsija.laskeHeuristinenArvio(alku, maali);
+        assertEquals(expResult, result);
+    }
 }

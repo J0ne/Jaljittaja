@@ -6,6 +6,7 @@
 package jaljittajaUI;
 
 import jaljittaja.Jaljittaja;
+import jaljittaja.Lista;
 import jaljittaja.Solmu;
 import jaljittaja.Verkko;
 import java.awt.BasicStroke;
@@ -104,7 +105,9 @@ public class Verkkonakyma extends JFrame {
         }
     }
 
-    public void PiirraSolmut(ArrayList<Solmu> solmut, Graphics g, int tila) {
+    public void PiirraSolmut(Lista<Solmu> solmutLista, Graphics g, int tila) {
+        
+        //ArrayList<Solmu> solmutArrayList = solmutLista.AnnaListaArrayListina();
         Graphics2D g2d = (Graphics2D) g;
 
         int i = 0;
@@ -116,7 +119,7 @@ public class Verkkonakyma extends JFrame {
             for (Solmu solmu : rivi) {
 
                 String nimi = solmu.getX() + "," + solmu.getY();
-                for (Solmu s : solmut) {
+                for (Solmu s : solmutLista) {
                     //System.out.println("X: " +s.getX() +", Y: " + s.getY() + " -> i: " + tempI + ", j: " + tempJ);
                     if (s.getX() == tempI && s.getY() == tempJ && !solmu.OnEste) {
                         if (!s.isMaali()) {

@@ -5,6 +5,8 @@
  */
 package jaljittaja;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -146,11 +148,54 @@ public class ListaTest {
     public void testToString() {
         System.out.println("toString");
         Lista instance = new Lista();
-        
+        instance.Lisaa("X");
         String expResult = "";
         String result = instance.toString();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
+    }
+
+    /**
+     * Test of AnnaListaArrayListina method, of class Lista.
+     */
+    @Test
+    public void testAnnaListaArrayListina() {
+        System.out.println("AnnaListaArrayListina");
+        Lista instance = new Lista();
+        instance.Lisaa(1);
+        instance.Lisaa("2");
+        Solmu solmu = new Solmu(1, 1, false);
+        instance.Lisaa(solmu);
+        ArrayList expResult = new ArrayList();
+        expResult.add(1);
+        expResult.add("2");
+        expResult.add(solmu);
+        
+        ArrayList result = instance.AnnaListaArrayListina();
+        
+        vertaileKokoelmat(expResult, result);
+    }
+
+    private void vertaileKokoelmat(ArrayList a, ArrayList b){
+        assertEquals(a.size(), b.size());
+        
+        for (Object b1 : b) {
+            assertTrue(a.contains(b1));
+        }
+    }
+    
+    /**
+     * Test of iterator method, of class Lista.
+     */
+    @Test @Ignore
+    public void testIterator() {
+        System.out.println("iterator");
+        Lista instance = new Lista();
+        Iterator expResult = null;
+        Iterator result = instance.iterator();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
     
 }
