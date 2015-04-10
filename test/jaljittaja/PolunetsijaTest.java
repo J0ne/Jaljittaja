@@ -24,7 +24,7 @@ public class PolunetsijaTest {
     Solmu alkupiste;
     Solmu maali;
     Polunetsija polunEtsija;
-    
+    Verkko verkko;
     @BeforeClass
     public static void setUpClass() {
     }
@@ -38,7 +38,7 @@ public class PolunetsijaTest {
         alkupiste = new Solmu(0, 0, false,true);
         maali = new Solmu(4, 4, false);
         maali.setMaali(true);
-        Verkko verkko = new Verkko(5, alkupiste, maali);
+        verkko = new Verkko(5, alkupiste, maali);
         polunEtsija = new Polunetsija(verkko);
     }
     
@@ -117,5 +117,39 @@ public class PolunetsijaTest {
         expResult = 7;
         result = polunEtsija.laskeHeuristinenArvio(alku, maali);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of AsetaMaali method, of class Polunetsija.
+     */
+    @Test
+    public void testAsetaMaali() {
+        System.out.println("AsetaMaali");
+        int uusiX = 1;
+        int uusiY = 2;
+        // testi-luokan alustuksessa anettu maali
+        Solmu vanhaMaali = maali;
+        
+        Polunetsija instance = new Polunetsija(verkko);
+        
+        Solmu expResult = verkko.Solmut[uusiX][uusiY];
+        Solmu result = instance.AsetaMaali(uusiX, uusiY, vanhaMaali);
+        assertEquals(expResult, result);
+        
+    }
+
+    /**
+     * Test of annaEtaisyys method, of class Polunetsija.
+     */
+    @Test
+    public void testAnnaEtaisyys() {
+        System.out.println("annaEtaisyys");
+        Solmu nykyinen = new Solmu(4, 0, false);
+        Solmu naapuri = new Solmu(0, 0, false);
+        Polunetsija instance = new Polunetsija(verkko);
+        int expResult = 4;
+        int result = instance.annaEtaisyys(nykyinen, naapuri);
+        assertEquals(expResult, result);
+
     }
 }

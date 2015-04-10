@@ -4,7 +4,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jaljittaja;
 
 import jaljittajaUI.Verkkonakyma;
@@ -20,21 +19,34 @@ public class Jaljittaja {
 
     /**
      * Pääohjelma
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Solmu alkupiste = new Solmu(1, 6, false, true);
-        Solmu maali = new Solmu(16,13, false);
+        alkupiste = new Solmu(0, 8, false, true);
+        maali = new Solmu(16, 13, false);
         maali.setMaali(true);
-        Verkko matriisi = new Verkko(20, alkupiste, maali);
-        
-        Polunetsija etsija = new Polunetsija(matriisi);
-        boolean liikkuvaMaali = false;
-        etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
-        
+
+        matriisi = new Verkko(20, alkupiste, maali);
+        etsija = new Polunetsija(matriisi);
         //Verkkonakyma vn = new Verkkonakyma(matriisi);
-        
     }
-    
+    private static Solmu alkupiste;
+    private static Solmu maali;
+    private static Polunetsija etsija;
+    private static Verkko matriisi;
+
+    public static void Kaynnista() {
+        boolean liikkuvaMaali = false;
+
+        etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
+    }
+
+    public static void Kaynnista(Solmu uusiMaali) {
+        boolean liikkuvaMaali = false;
+        uusiMaali.setMaali(true);
+        etsija = new Polunetsija(matriisi);
+        etsija.EtsiLyhinPolku(alkupiste, uusiMaali, liikkuvaMaali);
+    }
 }

@@ -203,10 +203,10 @@ public class Solmu {
     @Override
     public String toString() {
         if(this.isMaali()){
-            return "MAALI!";
+            return "MAALI, " + "x=" + this.getX() + ", y=" + getY();
         }
         if(this.isOnAlkupiste()){
-            return "ALKUPISTE";
+            return "ALKUPISTE, x=" + this.getX() + ", y=" + getY();
         }
         return "Solmu{" + "x=" + this.getX() + ", y=" + getY() + " G:" + this.getG_arvo() +
                 " F:" + this.getF_arvo() + '}';

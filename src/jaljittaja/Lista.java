@@ -12,8 +12,9 @@ import java.lang.Iterable;
 import java.util.Iterator;
 
 /**
- *
+ * Geneerinen tietorakenne
  * @author jouni
+ * @param <E>
  */
 public class Lista<E> implements Iterable<E>{
     
@@ -21,10 +22,17 @@ public class Lista<E> implements Iterable<E>{
     private static final int KAPASITEETTI = 10;
     private Object[] alkiot;
 
+    /**
+     * Konstruktori
+     */
     public Lista() {
         this.alkiot = new Object[KAPASITEETTI];
     }
     
+    /**
+     * Lisää alkion listaan
+     * @param olio
+     */
     public void Lisaa(E olio){
         if(koko == alkiot.length){
             kasvataListanKokoa();
@@ -39,6 +47,11 @@ public class Lista<E> implements Iterable<E>{
         alkiot = Arrays.copyOf(alkiot, tuplattuKoko);
     }
     
+    /**
+     * Palauttaa alkion listasta indeksin mukaan
+     * @param indeksi
+     * @return
+     */
     public E AnnaAlkio(int indeksi){
         if(indeksi < 0 || indeksi > alkiot.length){
             throw new IndexOutOfBoundsException("Listassa on " + alkiot.length + " oliota. Haetun indeksi " + indeksi);
@@ -46,6 +59,10 @@ public class Lista<E> implements Iterable<E>{
         return (E)alkiot[indeksi];
     }
     
+    /**
+     * Poistaa parametrina annetun alkion listasta.
+     * @param poistettava
+     */
     public void PoistaListasta(E poistettava){
         int poistettavanIndeksi = -1;
         // haetaan poistettavan indeksi
@@ -72,10 +89,19 @@ public class Lista<E> implements Iterable<E>{
 //       }
     }
     
+    /**
+     * Palauttaa listan alkioiden määrän. Huom. eri kuin listan kapasiteetti.
+     * @return koko
+     */
     public int AlkioidenMaara(){
           return koko;
     }
     
+    /**
+     * Palauttaa tiedon, onko parametrna annettu alkio listassa
+     * @param alkio
+     * @return
+     */
     public boolean OnkoAlkioListassa(E alkio){
         for (Object alkiot1 : alkiot) {
             
@@ -84,6 +110,12 @@ public class Lista<E> implements Iterable<E>{
         }
         return false;
     }
+
+    /**
+     * Palauttaa listan alkiot ArrayList-tietorakenteessa. 
+     * Apumetodi testatusta varten
+     * @return
+     */
     public ArrayList<E> AnnaListaArrayListina(){
         ArrayList<E> palautettava = new ArrayList<>();
         for (int i = 0; i < alkiot.length; i++) {

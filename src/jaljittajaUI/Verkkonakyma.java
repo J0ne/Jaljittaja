@@ -11,18 +11,23 @@ import jaljittaja.Solmu;
 import jaljittaja.Verkko;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,16 +35,23 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author jouni
  */
 public class Verkkonakyma extends JFrame {
-
+    
     private final int PITUUS = 45;
     private final int KORKEUS = 35;
-
+    JTextArea txtArea;
+    JPanel jpanel;
+    JButton start;
+    Solmu maali = null;
+    Lista<Solmu> maaliLista;
+    
+    final static BasicStroke stroke = new BasicStroke(2);
     /**
      *
      * @param verkko
@@ -50,20 +62,42 @@ public class Verkkonakyma extends JFrame {
         setSize(1200, 900);
         setVisible(true);
         
-        JPanel jpanel = new JPanel();
+        jpanel = new JPanel();
         jpanel.setAlignmentX(TOP_ALIGNMENT);
         jpanel.setAlignmentY(TOP_ALIGNMENT);
-        jpanel.setSize(200, 400);
-        JButton start = new JButton("start");
-        start.addActionListener(new ActionListener()
-{
-  public void actionPerformed(ActionEvent e)
-  {
-      
-      
-  }
-});
+        //jpanel.setSize(200, 400);
+        
+        txtArea = new JTextArea(1, 8);
+
+        
+        jpanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Koordinaatit xy = annaSijaintiMatriisissa(e.getLocationOnScreen().getLocation());
+                setText(xy.getX() + ", " +xy.getY());
+                maali = new Solmu(xy.getX(), xy.getY(), false, false);
+                maali.setMaali(true);
+                Graphics2D g = (Graphics2D)getGraphics();
+                maaliLista = new Lista<Solmu>();
+                maaliLista.Lisaa(maali);
+                PiirraSolmut(maaliLista, g, 1);
+            }
+        });
+        start = new JButton("Aloita");
+        
+        start.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Jaljittaja.Kaynnista();
+//                if(maaliLista.AlkioidenMaara() > 0){
+//                    Jaljittaja.Kaynnista(maaliLista.AnnaAlkio(0));
+//                }
+//                else{
+//                    Jaljittaja.Kaynnista();
+//                }
+            }
+        });
         jpanel.add(start);
+        jpanel.add(txtArea);
         this.add(jpanel);
         
         addWindowListener(new WindowAdapter() {
@@ -73,8 +107,37 @@ public class Verkkonakyma extends JFrame {
             }
         });
     }
-    final static BasicStroke stroke = new BasicStroke(2);
 
+    
+    private void setText(String text) {
+        this.txtArea.setText(text);
+    }
+    class Koordinaatit{
+
+        public Koordinaatit(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+    
+    int x;
+    int y;
+    }
+    
+    private Koordinaatit annaSijaintiMatriisissa(Point point){
+        int sivu = this.verkko.Solmut.length;
+        int x = (((int)point.getX() - 150) / PITUUS);
+        int y = (((int)point.getY() - (170)) / KORKEUS);
+        
+        return new Koordinaatit(x, y);
+    }
     
     @Override
     public void paint(Graphics g) {
@@ -86,7 +149,7 @@ public class Verkkonakyma extends JFrame {
         for (Solmu[] rivi : this.verkko.Solmut) {
             int j = 0;
             for (Solmu solmu : rivi) {
-
+                
                 String nimi = solmu.getX() + "," + solmu.getY();
                 if (solmu.OnEste) {
                     PiirraSolmu(g2d, i, j, nimi, 10);
@@ -104,31 +167,30 @@ public class Verkkonakyma extends JFrame {
             i += PITUUS;
         }
     }
-
+    
     public void PiirraSolmut(Lista<Solmu> solmutLista, Graphics g, int tila) {
-        
+
         //ArrayList<Solmu> solmutArrayList = solmutLista.AnnaListaArrayListina();
         Graphics2D g2d = (Graphics2D) g;
-
+        
         int i = 0;
         int tempI = 0;
-
+        
         for (Solmu[] rivi : this.verkko.Solmut) {
             int j = 0;
             int tempJ = 0;
             for (Solmu solmu : rivi) {
-
+                
                 String nimi = solmu.getX() + "," + solmu.getY();
                 for (Solmu s : solmutLista) {
                     //System.out.println("X: " +s.getX() +", Y: " + s.getY() + " -> i: " + tempI + ", j: " + tempJ);
                     if (s.getX() == tempI && s.getY() == tempJ && !solmu.OnEste) {
                         if (!s.isMaali()) {
                             PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), tila);
-                        }
-                        else{
+                        } else {
                             PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), 4);
                         }
-
+                        
                     }
                 }
                 j += KORKEUS;
@@ -137,7 +199,7 @@ public class Verkkonakyma extends JFrame {
             i += PITUUS;
             tempI++;
         }
-
+        
     }
     /**
      *
@@ -159,7 +221,7 @@ public class Verkkonakyma extends JFrame {
     public void setVerkko(Verkko verkko) {
         this.verkko = verkko;
     }
-
+    
     private void PiirraSolmu(Graphics2D g2d, int x, int y, String id, int state) {
         int x1 = 150 + x;
         int y1 = 150 + y;
@@ -188,14 +250,14 @@ public class Verkkonakyma extends JFrame {
                 break;
         }
         if (state > 0) {
-
+            
             g2d.setPaint(color);
             g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 5, KORKEUS - 5));
             g2d.drawRect(x1, y1, PITUUS, KORKEUS);
         }
         g2d.setColor(Color.BLACK);
         g2d.drawRect(x1, y1, PITUUS, KORKEUS);
-        if(state == 1){
+        if (state == 1) {
             g2d.setColor(Color.WHITE);
         }
         g2d.drawString(id, x1 + 10, y1 + 25);

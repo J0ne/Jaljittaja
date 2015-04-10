@@ -27,6 +27,10 @@ public class Polunetsija {
      */
     public Polunetsija(Verkko verkko) {
         this.verkko = verkko;
+        if(nakyma == null){
+            nakyma = new Verkkonakyma(verkko);
+        }
+        g = nakyma.getGraphics();
     }
 
     /**
@@ -38,7 +42,7 @@ public class Polunetsija {
      * Verkkonäkymä. Tämän avulla voidaan havainnollistaa algortimin suorituksen
      * etenemistä
      */
-    public Verkkonakyma nakyma;
+    public static Verkkonakyma nakyma;
     Graphics g;
 
     /**
@@ -46,11 +50,12 @@ public class Polunetsija {
      *
      * @param alkupiste
      * @param maali
+     * @param liikkuvaMaali
      * @return
      */
+    // todo: refaktoroitava
     public Lista<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali, boolean liikkuvaMaali) {
-        nakyma = new Verkkonakyma(verkko);
-        g = nakyma.getGraphics();
+        
 
         Prioriteettijono avoinLista = new Prioriteettijono(); // open set 
         Lista<Solmu> suljettuLista = new Lista<Solmu>(); // closed set
@@ -123,7 +128,7 @@ public class Polunetsija {
                     naapuri.setEdeltaja(nykyinen);
                     avoinLista.LisaaListaan(naapuri);
                 }
-
+                // pieni delay, jotta helpompi seurata UI:sta
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException ex) {
@@ -156,6 +161,18 @@ public class Polunetsija {
             uusiY = 0;
         }
         System.out.println("Random " + x + " -- " + y);
+        Solmu uusiMaali = AsetaMaali(uusiX, uusiY, vanhaMaali);
+        return uusiMaali;
+    }
+
+    /**
+     * Apumetodi liikkuvan maalin toteutukseen. Palauttaa uuden maalin.
+     * @param uusiX
+     * @param uusiY
+     * @param vanhaMaali
+     * @return
+     */
+    public Solmu AsetaMaali(int uusiX, int uusiY, Solmu vanhaMaali) {
         Solmu uusiMaali = new Solmu(uusiX, uusiY, false);
         uusiMaali.setMaali(true);
         vanhaMaali.setMaali(false);
@@ -163,6 +180,12 @@ public class Polunetsija {
         return uusiMaali;
     }
 
+    /**
+     * Laskee annettujen solmujen etäisyyteen perustuvan heuristisen arvion.
+     * @param alku
+     * @param maali
+     * @return
+     */
     protected int laskeHeuristinenArvio(Solmu alku, Solmu maali) {
         int etaisyysX = Math.abs(maali.getX() - alku.getX());
         int etaisyysY = Math.abs(maali.getY() - alku.getY());
@@ -229,7 +252,13 @@ public class Polunetsija {
         return naapurit;
     }
 
-    private int annaEtaisyys(Solmu nykyinen, Solmu naapuri) {
+    /**
+     * Laskee solmujen välisen etäisyyden
+     * @param nykyinen
+     * @param naapuri
+     * @return
+     */
+    protected int annaEtaisyys(Solmu nykyinen, Solmu naapuri) {
         int etaisyysX = nykyinen.getX() - naapuri.getX();
         int etaisyysY = nykyinen.getY() - naapuri.getY();
         if (etaisyysX < 0) {
