@@ -6,6 +6,7 @@
  */
 package jaljittaja;
 
+import Tilastointi.Massasuorittaja;
 import jaljittajaUI.Verkkonakyma;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -48,5 +49,10 @@ public class Jaljittaja {
         uusiMaali.setMaali(true);
         etsija = new Polunetsija(matriisi);
         etsija.EtsiLyhinPolku(alkupiste, uusiMaali, liikkuvaMaali);
+    }
+    
+    public static void KaynnistaMassaAjona(){
+        Massasuorittaja suorittaja = new Massasuorittaja();
+        suorittaja.Aja();
     }
 }

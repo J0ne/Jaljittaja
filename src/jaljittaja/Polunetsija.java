@@ -7,7 +7,6 @@ package jaljittaja;
 
 import jaljittajaUI.Verkkonakyma;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
 public class Polunetsija {
 
     /**
-     * Konstruktori joka saa parametriä verkon
+     * Konstruktori joka saa parametrinä verkon
      *
      * @param verkko
      */
@@ -34,7 +33,7 @@ public class Polunetsija {
         g = nakyma.getGraphics();
     }
 
-    // todo: refaktorointi, nyt vaan ylikirjoitetaan signature, vaikka piirretaan <- aina false tässä
+    // Konstruktori jolla polunetsintä voidaan suorittaa ilman UI-simulointia
     public Polunetsija(Verkko verkko, boolean ilmanUI) {
         this.verkko = verkko;
         this.piirretaanUI = false;
@@ -74,14 +73,17 @@ public class Polunetsija {
         alkupiste.setEdeltaja(null);
         avoinLista.LisaaListaan(alkupiste);
         Solmu tmp = maali;
+        
+        // 
         while (avoinLista.ListanKoko() != 0) {
-            Solmu nykyinen = avoinLista.AnnaSolmu();
-            suljettuLista.Lisaa(nykyinen);
+            // otetaan listasta solmu, jolla on pienin F-arvo
+            Solmu kasittelyssaOleva = avoinLista.AnnaSolmu();
+            suljettuLista.Lisaa(kasittelyssaOleva);
 
             // piirretään verkkoa 
             if (piirretaanUI) {
                 Lista<Solmu> nykyinenPiirrettava = new Lista<Solmu>();
-                nykyinenPiirrettava.Lisaa(nykyinen);
+                nykyinenPiirrettava.Lisaa(kasittelyssaOleva);
                 nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
             }
 
@@ -103,27 +105,30 @@ public class Polunetsija {
                 liikkunutMaali = tmp;
             }
 
-            if (nykyinen.isMaali()) {
+            // jos "kasittelyssaOleva" == maali, polku on löytynyt
+            if (kasittelyssaOleva.isMaali()) {
                 System.out.println("Tulostetaan polku:");
-                kuljettuReitti = tulostaPolku(nykyinen);
+                kuljettuReitti = tulostaPolku(kasittelyssaOleva);
                 if (piirretaanUI) {
                     nakyma.PiirraSolmut(kuljettuReitti, g, 1);
                 }
 
                 return kuljettuReitti;
             }
-            Lista<Solmu> naapuriSolmut = annaSolmunNaapurit(nykyinen);
+            Lista<Solmu> naapuriSolmut = annaSolmunNaapurit(kasittelyssaOleva);
             if (piirretaanUI) {
                 nakyma.PiirraSolmut(naapuriSolmut, g, 2);
             }
-
+            // käydään kaikki kasittelyssa olevan solmun naapurit
             for (Solmu naapuri : naapuriSolmut) {
+                // jos jo kasitelty -> jatketaan
                 if (suljettuLista.OnkoAlkioListassa(naapuri)) {
                     continue;
                 }
 
-                int kokeiltava_G_arvo = nykyinen.getG_arvo() + annaEtaisyys(nykyinen, naapuri);
+                int kokeiltava_G_arvo = kasittelyssaOleva.getG_arvo() + annaEtaisyys(kasittelyssaOleva, naapuri);
                 System.out.println(" Alustava G: " + kokeiltava_G_arvo);
+                
                 //if neighbor in OPEN and cost less than g(neighbor):
                 if (avoinLista.OnkoJonossa(naapuri) & kokeiltava_G_arvo < naapuri.getG_arvo()) {
                     //remove neighbor from OPEN, because new path is better
@@ -142,7 +147,7 @@ public class Polunetsija {
 //      set neighbor's parent to current
                     naapuri.setG_arvo(kokeiltava_G_arvo);
                     naapuri.setF_arvo(kokeiltava_G_arvo + laskeHeuristinenArvio(naapuri, liikkunutMaali));
-                    naapuri.setEdeltaja(nykyinen);
+                    naapuri.setEdeltaja(kasittelyssaOleva);
                     avoinLista.LisaaListaan(naapuri);
                 }
                 // pieni delay, jotta helpompi seurata UI:sta
