@@ -39,7 +39,7 @@ public class PolunetsijaTest {
         maali = new Solmu(4, 4, false);
         maali.setMaali(true);
         verkko = new Verkko(5, alkupiste, maali);
-        polunEtsija = new Polunetsija(verkko);
+        polunEtsija = new Polunetsija(verkko, false);
     }
     
     @After
@@ -53,7 +53,7 @@ public class PolunetsijaTest {
     public void testEtsiLyhinPolku() {
         System.out.println("EtsiLyhinPolku");
         Verkko verkko = new Verkko(5, alkupiste, maali);
-        Polunetsija instance = new Polunetsija(verkko);
+        Polunetsija instance = new Polunetsija(verkko, false);
         
         Lista<Solmu> expResult = new Lista<Solmu>();
         expResult.Lisaa(verkko.Solmut[4][4]);
@@ -130,7 +130,7 @@ public class PolunetsijaTest {
         // testi-luokan alustuksessa anettu maali
         Solmu vanhaMaali = maali;
         
-        Polunetsija instance = new Polunetsija(verkko);
+        Polunetsija instance = new Polunetsija(verkko, false);
         
         Solmu expResult = verkko.Solmut[uusiX][uusiY];
         Solmu result = instance.AsetaMaali(uusiX, uusiY, vanhaMaali);

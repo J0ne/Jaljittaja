@@ -38,7 +38,7 @@ public class Jaljittaja {
     private static Verkko matriisi;
 
     public static void Kaynnista() {
-        boolean liikkuvaMaali = false;
+        boolean liikkuvaMaali = true;
 
         etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
     }

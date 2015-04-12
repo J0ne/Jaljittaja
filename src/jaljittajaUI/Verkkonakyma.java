@@ -87,6 +87,8 @@ public class Verkkonakyma extends JFrame {
         
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                Graphics2D g = (Graphics2D)getGraphics();
+                paint(g);
                 Jaljittaja.Kaynnista();
 //                if(maaliLista.AlkioidenMaara() > 0){
 //                    Jaljittaja.Kaynnista(maaliLista.AnnaAlkio(0));
@@ -172,7 +174,6 @@ public class Verkkonakyma extends JFrame {
 
         //ArrayList<Solmu> solmutArrayList = solmutLista.AnnaListaArrayListina();
         Graphics2D g2d = (Graphics2D) g;
-        
         int i = 0;
         int tempI = 0;
         
@@ -186,10 +187,19 @@ public class Verkkonakyma extends JFrame {
                     //System.out.println("X: " +s.getX() +", Y: " + s.getY() + " -> i: " + tempI + ", j: " + tempJ);
                     if (s.getX() == tempI && s.getY() == tempJ && !solmu.OnEste) {
                         if (!s.isMaali()) {
-                            PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), tila);
+                            if(!s.OnEste || !s.OnAlkupiste){
+                                if(tila != 0){
+                                    // naapurisolmuille kustannus
+                                    nimi = "" + s.getG_arvo();
+                                }
+                                PiirraSolmu(g2d, i, j, nimi, tila);
+                            }
+                            
                         } else {
-                            PiirraSolmu(g2d, i, j, "" + s.getG_arvo(), 4);
+                            //PiirraSolmu(g2d, i, j, nimi, 0);
+                            PiirraSolmu(g2d, i, j, nimi, 4);
                         }
+                        
                         
                     }
                 }
@@ -246,13 +256,13 @@ public class Verkkonakyma extends JFrame {
                 color = Color.BLACK;
                 break;
             default:
-                color = Color.darkGray;
+                color = Color.WHITE;
                 break;
         }
-        if (state > 0) {
+        if (state > -1) {
             
             g2d.setPaint(color);
-            g2d.fill(new Rectangle2D.Double(x1 + 5, y1 + 5, PITUUS - 5, KORKEUS - 5));
+            g2d.fill(new Rectangle2D.Double(x1 , y1, PITUUS - 3, KORKEUS - 3));
             g2d.drawRect(x1, y1, PITUUS, KORKEUS);
         }
         g2d.setColor(Color.BLACK);
@@ -260,6 +270,6 @@ public class Verkkonakyma extends JFrame {
         if (state == 1) {
             g2d.setColor(Color.WHITE);
         }
-        g2d.drawString(id, x1 + 10, y1 + 25);
+        g2d.drawString(id, x1 + 5, y1 + 25);
     }
 }

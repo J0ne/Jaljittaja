@@ -27,12 +27,18 @@ public class Polunetsija {
      */
     public Polunetsija(Verkko verkko) {
         this.verkko = verkko;
-        if(nakyma == null){
+        if (nakyma == null) {
             nakyma = new Verkkonakyma(verkko);
         }
+        piirretaanUI = true;
         g = nakyma.getGraphics();
     }
 
+    // todo: refaktorointi, nyt vaan ylikirjoitetaan signature, vaikka piirretaan <- aina false tässä
+    public Polunetsija(Verkko verkko, boolean ilmanUI) {
+        this.verkko = verkko;
+        this.piirretaanUI = false;
+    }
     /**
      * Verkko
      */
@@ -44,6 +50,7 @@ public class Polunetsija {
      */
     public static Verkkonakyma nakyma;
     Graphics g;
+    boolean piirretaanUI;
 
     /**
      * Metodi joka etsii lyhyimmän polun pisteestä A pisteeseen B.
@@ -55,7 +62,6 @@ public class Polunetsija {
      */
     // todo: refaktoroitava
     public Lista<Solmu> EtsiLyhinPolku(Solmu alkupiste, Solmu maali, boolean liikkuvaMaali) {
-        
 
         Prioriteettijono avoinLista = new Prioriteettijono(); // open set 
         Lista<Solmu> suljettuLista = new Lista<Solmu>(); // closed set
@@ -73,19 +79,24 @@ public class Polunetsija {
             suljettuLista.Lisaa(nykyinen);
 
             // piirretään verkkoa 
-            Lista<Solmu> nykyinenPiirrettava = new Lista<Solmu>();
-            nykyinenPiirrettava.Lisaa(nykyinen);
-            nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
+            if (piirretaanUI) {
+                Lista<Solmu> nykyinenPiirrettava = new Lista<Solmu>();
+                nykyinenPiirrettava.Lisaa(nykyinen);
+                nakyma.PiirraSolmut(nykyinenPiirrettava, g, 5);
+            }
 
             Solmu liikkunutMaali;
             // maali liikkuu vain ehdollisena
             if (liikkuvaMaali) {
                 liikkunutMaali = LiikutaMaalia(tmp);
-                Lista<Solmu> maaliPiirrettava = new Lista<Solmu>();
-                maaliPiirrettava.Lisaa(liikkunutMaali);
-                maali.setMaali(false);
-                maaliPiirrettava.Lisaa(maali);
-                nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
+                tmp.setMaali(false);
+                if (piirretaanUI) {
+                    Lista<Solmu> maaliPiirrettava = new Lista<Solmu>();
+                    maaliPiirrettava.Lisaa(liikkunutMaali);
+                    maaliPiirrettava.Lisaa(tmp);
+                    nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
+                }
+
                 System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
                 tmp = liikkunutMaali;
             } else {
@@ -95,11 +106,17 @@ public class Polunetsija {
             if (nykyinen.isMaali()) {
                 System.out.println("Tulostetaan polku:");
                 kuljettuReitti = tulostaPolku(nykyinen);
-                nakyma.PiirraSolmut(kuljettuReitti, g, 1);
+                if (piirretaanUI) {
+                    nakyma.PiirraSolmut(kuljettuReitti, g, 1);
+                }
+
                 return kuljettuReitti;
             }
             Lista<Solmu> naapuriSolmut = annaSolmunNaapurit(nykyinen);
-            nakyma.PiirraSolmut(naapuriSolmut, g, 2);
+            if (piirretaanUI) {
+                nakyma.PiirraSolmut(naapuriSolmut, g, 2);
+            }
+
             for (Solmu naapuri : naapuriSolmut) {
                 if (suljettuLista.OnkoAlkioListassa(naapuri)) {
                     continue;
@@ -129,12 +146,13 @@ public class Polunetsija {
                     avoinLista.LisaaListaan(naapuri);
                 }
                 // pieni delay, jotta helpompi seurata UI:sta
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
+                if (piirretaanUI) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-
             }
 
         }
@@ -167,13 +185,14 @@ public class Polunetsija {
 
     /**
      * Apumetodi liikkuvan maalin toteutukseen. Palauttaa uuden maalin.
+     *
      * @param uusiX
      * @param uusiY
      * @param vanhaMaali
      * @return
      */
     public Solmu AsetaMaali(int uusiX, int uusiY, Solmu vanhaMaali) {
-        Solmu uusiMaali = new Solmu(uusiX, uusiY, false);
+        Solmu uusiMaali = verkko.Solmut[uusiX][uusiY];
         uusiMaali.setMaali(true);
         vanhaMaali.setMaali(false);
         verkko.AsetaMaalinSijainti(uusiX, uusiY);
@@ -182,6 +201,7 @@ public class Polunetsija {
 
     /**
      * Laskee annettujen solmujen etäisyyteen perustuvan heuristisen arvion.
+     *
      * @param alku
      * @param maali
      * @return
@@ -254,6 +274,7 @@ public class Polunetsija {
 
     /**
      * Laskee solmujen välisen etäisyyden
+     *
      * @param nykyinen
      * @param naapuri
      * @return
