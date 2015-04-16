@@ -5,6 +5,7 @@
  */
 package jaljittaja;
 
+import Tilastointi.SuorituksenInfo;
 import jaljittajaUI.Verkkonakyma;
 import java.awt.Graphics;
 import java.util.Random;
@@ -37,6 +38,13 @@ public class Polunetsija {
     public Polunetsija(Verkko verkko, boolean ilmanUI) {
         this.verkko = verkko;
         this.piirretaanUI = false;
+        this.suoritusinfo = new SuorituksenInfo();
+    }
+    
+    SuorituksenInfo suoritusinfo;
+
+    public SuorituksenInfo getTietorivi() {
+        return suoritusinfo;
     }
     /**
      * Verkko
@@ -170,7 +178,7 @@ public class Polunetsija {
         int x = 1 - rand.nextInt(3);
         int y = 1 - rand.nextInt(3);
         int uusiX = vanhaMaali.getX() + x;
-        int uusiY = vanhaMaali.getY() + y; // + y;
+        int uusiY = vanhaMaali.getY() + y;
         if (uusiX > max) {
             uusiX = max;
         }

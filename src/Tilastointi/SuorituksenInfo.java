@@ -14,5 +14,17 @@ public class SuorituksenInfo {
     int verkonKoko;
     boolean polkuLoytyi;
     double suorituksenKesto;
+
+    public void setSuorituksenKesto(double suorituksenKesto) {
+        this.suorituksenKesto = suorituksenKesto;
+    }
+    int lapikaydytSolmut;
+    int maalinStepit;
     // todo: myöhemmin täydentyy tarvittavat tilastoitavat tiedot
+
+    @Override
+    public String toString() {
+        return "SuorituksenInfo{" + "verkonKoko=" + verkonKoko + ", polkuLoytyi=" + polkuLoytyi + ", suorituksenKesto=" + suorituksenKesto + ", lapikaydytSolmut=" + lapikaydytSolmut + ", maalinStepit=" + maalinStepit + '}';
+    }
+    
 }

@@ -19,24 +19,33 @@ import java.util.Date;
  */
 public class Massasuorittaja {
 
+    Lista<SuorituksenInfo> suoritustenData = new Lista<>();
     /**
      * Ajetaan useampi etsintä silmukassa.
      */
     public void Aja() {
+        // todo: nämä parametreiksi
         Solmu alkupiste = new Solmu(1, 1, false, true);
         Solmu maali = new Solmu(4, 4, false);
         maali.setMaali(true);
         Verkko verkko = new Verkko(10, alkupiste, maali);
         Polunetsija etsija = new Polunetsija(verkko, false);
-        Date startTime = new Date();
         for (int i = 0; i < 5; i++) {
+            Date startTime = new Date();
             Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, false);
+            
             if (lyhinPolku.AlkioidenMaara() > 0) {
                 System.out.println("Löytyi " + lyhinPolku.toString());
             }
+            Date endTime = new Date();
+            double suorituksenKesto = endTime.getTime() - startTime.getTime();
+            etsija.getTietorivi().suorituksenKesto = suorituksenKesto;
+            suoritustenData.Lisaa(etsija.getTietorivi());
         }
-        Date endTime = new Date();
-        System.out.println("Kesto:" + (endTime.getTime() - startTime.getTime()));
-
+        for (SuorituksenInfo suoritustenData1 : suoritustenData) {
+            suoritustenData1.toString();
+            
+        }
+        int suoritukset = suoritustenData.AlkioidenMaara();
     }
 }
