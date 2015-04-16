@@ -15,6 +15,10 @@ public class SuorituksenInfo {
     boolean polkuLoytyi;
     double suorituksenKesto;
 
+    /**
+     * Suorituksen kesto tiedetään vasta suorituksen päätyttyä, joten sen asettamiseen oma metodinsa
+     * @param suorituksenKesto
+     */
     public void setSuorituksenKesto(double suorituksenKesto) {
         this.suorituksenKesto = suorituksenKesto;
     }

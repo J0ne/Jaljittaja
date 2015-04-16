@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import sun.awt.X11.XConstants;
 
 /**
- *
+ * Jaljittaja-luokka, josta ohjelma käynnistetään halutulla tavalla
  * @author jouni
  */
 public class Jaljittaja {
@@ -38,12 +38,19 @@ public class Jaljittaja {
     private static Polunetsija etsija;
     private static Verkko matriisi;
 
+    /**
+     * Polunetsinnän käynnistävä metodi valmiilla, kovakoodatuilla syötteillä
+     */
     public static void Kaynnista() {
         boolean liikkuvaMaali = true;
 
         etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
     }
 
+    /**
+     * Polunetsinnän käynnistävä metodi, jonka avulla maali voidaan antaa parametrina
+     * @param uusiMaali
+     */
     public static void Kaynnista(Solmu uusiMaali) {
         boolean liikkuvaMaali = false;
         uusiMaali.setMaali(true);
@@ -51,6 +58,9 @@ public class Jaljittaja {
         etsija.EtsiLyhinPolku(alkupiste, uusiMaali, liikkuvaMaali);
     }
     
+    /**
+     * Polunetsinnän käynnistäminen massa-ajona
+     */
     public static void KaynnistaMassaAjona(){
         Massasuorittaja suorittaja = new Massasuorittaja();
         suorittaja.Aja();

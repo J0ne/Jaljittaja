@@ -35,7 +35,13 @@ public class Polunetsija {
     }
 
     // Konstruktori jolla polunetsintä voidaan suorittaa ilman UI-simulointia
-    public Polunetsija(Verkko verkko, boolean ilmanUI) {
+
+    /**
+     * Konstruktori jolla ohjelma voidaan käynnistää ilman käyttöliittymäsimulointia
+     * @param verkko
+     * @param ilmanUI
+     */
+        public Polunetsija(Verkko verkko, boolean ilmanUI) {
         this.verkko = verkko;
         this.piirretaanUI = false;
         this.suoritusinfo = new SuorituksenInfo();
@@ -43,6 +49,10 @@ public class Polunetsija {
     
     SuorituksenInfo suoritusinfo;
 
+    /**
+     * Palauttaa Tietorivi-olion, eli tiedot algoritmin suorituksesta
+     * @return
+     */
     public SuorituksenInfo getTietorivi() {
         return suoritusinfo;
     }
