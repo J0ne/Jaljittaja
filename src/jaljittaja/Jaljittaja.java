@@ -42,7 +42,7 @@ public class Jaljittaja {
      * Polunetsinnän käynnistävä metodi valmiilla, kovakoodatuilla syötteillä
      */
     public static void Kaynnista() {
-        boolean liikkuvaMaali = true;
+        boolean liikkuvaMaali = false;
 
         etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
     }

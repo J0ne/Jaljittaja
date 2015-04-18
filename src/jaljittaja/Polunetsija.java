@@ -35,22 +35,25 @@ public class Polunetsija {
     }
 
     // Konstruktori jolla polunetsintä voidaan suorittaa ilman UI-simulointia
-
     /**
-     * Konstruktori jolla ohjelma voidaan käynnistää ilman käyttöliittymäsimulointia
+     * Konstruktori jolla ohjelma voidaan käynnistää ilman
+     * käyttöliittymäsimulointia
+     *
      * @param verkko
      * @param ilmanUI
      */
-        public Polunetsija(Verkko verkko, boolean ilmanUI) {
+    public Polunetsija(Verkko verkko, boolean ilmanUI) {
         this.verkko = verkko;
         this.piirretaanUI = false;
         this.suoritusinfo = new SuorituksenInfo();
+        this.suoritusinfo.setVerkonKoko(verkko.Solmut.length ^ 2);
     }
-    
+
     SuorituksenInfo suoritusinfo;
 
     /**
      * Palauttaa Tietorivi-olion, eli tiedot algoritmin suorituksesta
+     *
      * @return
      */
     public SuorituksenInfo getTietorivi() {
@@ -68,6 +71,8 @@ public class Polunetsija {
     public static Verkkonakyma nakyma;
     Graphics g;
     boolean piirretaanUI;
+    int kasitellytSolmut = 0;
+    int maalinStepit = 0;
 
     /**
      * Metodi joka etsii lyhyimmän polun pisteestä A pisteeseen B.
@@ -91,9 +96,10 @@ public class Polunetsija {
         alkupiste.setEdeltaja(null);
         avoinLista.LisaaListaan(alkupiste);
         Solmu tmp = maali;
-        
+
         // 
         while (avoinLista.ListanKoko() != 0) {
+            kasitellytSolmut++;
             // otetaan listasta solmu, jolla on pienin F-arvo
             Solmu kasittelyssaOleva = avoinLista.AnnaSolmu();
             suljettuLista.Lisaa(kasittelyssaOleva);
@@ -117,7 +123,7 @@ public class Polunetsija {
                     nakyma.PiirraSolmut(maaliPiirrettava, g, 0);
                 }
 
-                System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
+//                System.out.println(liikkunutMaali.toString() + " X: " + liikkunutMaali.getX() + " Y: " + liikkunutMaali.getY());
                 tmp = liikkunutMaali;
             } else {
                 liikkunutMaali = tmp;
@@ -125,10 +131,13 @@ public class Polunetsija {
 
             // jos "kasittelyssaOleva" == maali, polku on löytynyt
             if (kasittelyssaOleva.isMaali()) {
-                System.out.println("Tulostetaan polku:");
+//                System.out.println("Tulostetaan polku:");
                 kuljettuReitti = tulostaPolku(kasittelyssaOleva);
                 if (piirretaanUI) {
                     nakyma.PiirraSolmut(kuljettuReitti, g, 1);
+                } else {
+                    suoritusinfo.setLapikaydytSolmut(kasitellytSolmut);
+                    suoritusinfo.setMaalinStepit(maalinStepit);
                 }
 
                 return kuljettuReitti;
@@ -145,8 +154,8 @@ public class Polunetsija {
                 }
 
                 int kokeiltava_G_arvo = kasittelyssaOleva.getG_arvo() + annaEtaisyys(kasittelyssaOleva, naapuri);
-                System.out.println(" Alustava G: " + kokeiltava_G_arvo);
-                
+//                System.out.println(" Alustava G: " + kokeiltava_G_arvo);
+
                 //if neighbor in OPEN and cost less than g(neighbor):
                 if (avoinLista.OnkoJonossa(naapuri) & kokeiltava_G_arvo < naapuri.getG_arvo()) {
                     //remove neighbor from OPEN, because new path is better
@@ -179,6 +188,11 @@ public class Polunetsija {
             }
 
         }
+        if (!piirretaanUI) {
+            suoritusinfo.setLapikaydytSolmut(kasitellytSolmut);
+            suoritusinfo.setMaalinStepit(maalinStepit);
+        }
+
         return null;
     }
 
@@ -201,8 +215,15 @@ public class Polunetsija {
         if (uusiY < 0) {
             uusiY = 0;
         }
-        System.out.println("Random " + x + " -- " + y);
-        Solmu uusiMaali = AsetaMaali(uusiX, uusiY, vanhaMaali);
+//        System.out.println("Random " + x + " -- " + y);
+        boolean onEste = this.verkko.Solmut[uusiX][uusiY].isOnEste() == true;
+        Solmu uusiMaali;
+        if (!onEste) {
+            uusiMaali = AsetaMaali(uusiX, uusiY, vanhaMaali);
+        } else {
+            uusiMaali = vanhaMaali;
+        }
+        maalinStepit++;
         return uusiMaali;
     }
 
@@ -239,16 +260,16 @@ public class Polunetsija {
             etaisyysY *= -1;
         }
         int summa = etaisyysX + etaisyysY;
-        System.out.println("F : etaisyysX: " + etaisyysX + " etaisyysY: " + etaisyysY + " -> " + summa);
+//        System.out.println("F : etaisyysX: " + etaisyysX + " etaisyysY: " + etaisyysY + " -> " + summa);
         return summa;
     }
 
     private Lista<Solmu> tulostaPolku(Solmu maali) {
         Lista<Solmu> polku = new Lista<Solmu>();
-        System.out.println("Maali: " + maali.getX() + "," + maali.getY());
+//        System.out.println("Maali: " + maali.getX() + "," + maali.getY());
         Solmu nykyinen = maali;
         while (nykyinen != null) {
-            System.out.println(" -> " + nykyinen.toString());
+//            System.out.println(" -> " + nykyinen.toString());
             polku.Lisaa(nykyinen);
             Solmu edeltaja = nykyinen.getEdeltaja();
             nykyinen = edeltaja;

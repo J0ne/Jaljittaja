@@ -26,24 +26,31 @@ public class Massasuorittaja {
     public void Aja() {
         // todo: nämä parametreiksi
         Solmu alkupiste = new Solmu(1, 1, false, true);
-        Solmu maali = new Solmu(4, 4, false);
+        Solmu maali = new Solmu(45, 45, false);
         maali.setMaali(true);
-        Verkko verkko = new Verkko(10, alkupiste, maali);
-        Polunetsija etsija = new Polunetsija(verkko, false);
-        for (int i = 0; i < 5; i++) {
+
+        
+        for (int i = 0; i < 50; i++) {
+            Verkko verkko = new Verkko(50, alkupiste, maali);
+            Polunetsija etsija = new Polunetsija(verkko, false);
+            boolean polkuLoytyi = false;
             Date startTime = new Date();
-            Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, false);
             
-            if (lyhinPolku.AlkioidenMaara() > 0) {
-                System.out.println("Löytyi " + lyhinPolku.toString());
+            Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, true);
+            
+            if (lyhinPolku != null) {
+//                System.out.println("Löytyi " + lyhinPolku.toString());
+                polkuLoytyi = true;
             }
             Date endTime = new Date();
             double suorituksenKesto = endTime.getTime() - startTime.getTime();
-            etsija.getTietorivi().suorituksenKesto = suorituksenKesto;
-            suoritustenData.Lisaa(etsija.getTietorivi());
+            SuorituksenInfo tietorivi = etsija.getTietorivi();
+            tietorivi.suorituksenKesto = suorituksenKesto;
+            tietorivi.setPolkuLoytyi(polkuLoytyi);
+            suoritustenData.Lisaa(tietorivi);
         }
         for (SuorituksenInfo suoritustenData1 : suoritustenData) {
-            suoritustenData1.toString();
+            System.out.println(suoritustenData1.toString());
             
         }
         int suoritukset = suoritustenData.AlkioidenMaara();

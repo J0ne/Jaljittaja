@@ -186,7 +186,7 @@ public class Solmu {
      * @param F_arvo
      */
     public void setF_arvo(int F_arvo) {
-        System.out.println("Asetetaan F: " + F_arvo);
+//        System.out.println("Asetetaan F: " + F_arvo);
         this.F_arvo = F_arvo;
     }
     

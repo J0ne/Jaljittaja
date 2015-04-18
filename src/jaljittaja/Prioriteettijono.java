@@ -33,8 +33,8 @@ public class Prioriteettijono {
      * @param lisattava
      */
     public void LisaaListaan(Solmu lisattava) {
-        System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: "
-                + lisattava.getG_arvo());
+//        System.out.println("Lisätty: x:" + lisattava.getX() + ", j:" + lisattava.getY() + " G: "
+//                + lisattava.getG_arvo());
         lista = this.getLista();
         lista.Lisaa(lisattava);
     }

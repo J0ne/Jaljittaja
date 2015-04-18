@@ -50,11 +50,11 @@ public class Verkko {
                 Solmut[i][j].setMaali(true);
                 }
                 //luodaan este
-                if ((j >= 2 && j % 7 == 0 && i %3 == 0 )&& (i > 0 && i < n-3) ||
-                        (j > 2 && j < n-3 && i== 8)
-                        || (j >= 5 && j < n-1 && i== 2)) {
-                    Solmut[i][j].OnEste = true;
-                }
+//                if ((j >= 2 && j % 7 == 0 && i %3 == 0 )&& (i > 0 && i < n-3) ||
+//                        (j > 2 && j < n-3 && i== 8)
+//                        || (j >= 5 && j < n-1 && i== 2)) {
+//                    Solmut[i][j].OnEste = true;
+//                }
             }
         }
         return this;
@@ -72,9 +72,20 @@ public class Verkko {
             this.maali = this.Solmut[x][y];
             this.Solmut[x][y].setMaali(true);
         }
+    }
+        /**
+     * Asettaa koordinaatein kohdennetun solmun esteeksi
+     * @param x
+     * @param y
+     */
+    public void AsetaEste(int x, int y){
+        Solmu kandidaatti = this.Solmut[x][y];
+        if(!kandidaatti.isOnEste() && !kandidaatti.isMaali() && !kandidaatti.isOnAlkupiste() ){
+            this.Solmut[x][y].setOnEste(true);
+        }else{
+            this.Solmut[x][y].setOnEste(false);
+        }
         
-        else
-            return;
     }
 
 }

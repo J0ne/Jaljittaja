@@ -11,6 +11,38 @@ package Tilastointi;
  * @author jouni
  */
 public class SuorituksenInfo {
+
+    public int getVerkonKoko() {
+        return verkonKoko;
+    }
+
+    public void setVerkonKoko(int verkonKoko) {
+        this.verkonKoko = verkonKoko;
+    }
+
+    public boolean isPolkuLoytyi() {
+        return polkuLoytyi;
+    }
+
+    public void setPolkuLoytyi(boolean polkuLoytyi) {
+        this.polkuLoytyi = polkuLoytyi;
+    }
+
+    public int getLapikaydytSolmut() {
+        return lapikaydytSolmut;
+    }
+
+    public void setLapikaydytSolmut(int lapikaydytSolmut) {
+        this.lapikaydytSolmut = lapikaydytSolmut;
+    }
+
+    public int getMaalinStepit() {
+        return maalinStepit;
+    }
+
+    public void setMaalinStepit(int maalinStepit) {
+        this.maalinStepit = maalinStepit;
+    }
     int verkonKoko;
     boolean polkuLoytyi;
     double suorituksenKesto;

@@ -67,7 +67,7 @@ public class Verkkonakyma extends JFrame {
      *
      * @param verkko
      */
-    public Verkkonakyma(Verkko verkko) {
+    public Verkkonakyma(final Verkko verkko) {
         super("Jäljittaja");
         this.verkko = verkko;
         setSize(1200, 900);
@@ -89,15 +89,33 @@ public class Verkkonakyma extends JFrame {
                 if (xy == null) {
                     return;
                 }
-
-                setText(xy.getX() + ", " + xy.getY());
-                maali = new Solmu(xy.getX(), xy.getY(), false, false);
-                maali.setMaali(true);
-                Graphics2D g = (Graphics2D) getGraphics();
-                maaliLista = new Lista<Solmu>();
-                maaliLista.Lisaa(maali);
-                PiirraSolmut(maaliLista, g, 1);
+                KasitteleKlikkaus(xy.getX(), xy.getY());
+//                setText(xy.getX() + ", " + xy.getY());
+//                maali = new Solmu(xy.getX(), xy.getY(), false, false);
+//                maali.setMaali(true);
+//                Graphics2D g = (Graphics2D) getGraphics();
+//                maaliLista = new Lista<Solmu>();
+//                maaliLista.Lisaa(maali);
+//                PiirraSolmut(maaliLista, g, 1);
             }
+
+            private void KasitteleKlikkaus(int x, int y) {
+                Graphics2D g = (Graphics2D) getGraphics();
+                Lista<Solmu> kasiteltavaL = new Lista<Solmu>();
+                Solmu kasiteltava = verkko.Solmut[x][y];
+                kasiteltavaL.Lisaa(kasiteltava);
+                switch(hiirimoodi){
+                    case 2:
+                        PiirraSolmut(kasiteltavaL, g, 10);
+                        verkko.AsetaEste(x, y);
+                        break;
+                    default:
+                        break;
+                }
+                    
+                  
+            }
+
         });
         start = new JButton("Aloita");
 
