@@ -57,7 +57,16 @@ public class Jaljittaja {
         etsija = new Polunetsija(matriisi);
         etsija.EtsiLyhinPolku(alkupiste, uusiMaali, liikkuvaMaali);
     }
-    
+        /**
+     * Polunetsinnän käynnistävä metodi, jonka avulla maali voidaan antaa parametrina
+     * @param uusiMaali
+     */
+    public static void Kaynnista(Verkko verkko) {
+        boolean liikkuvaMaali = false;
+        matriisi = verkko;
+        etsija = new Polunetsija(matriisi);
+        etsija.EtsiLyhinPolku(matriisi.alkupiste, matriisi.maali, liikkuvaMaali);
+    }
     /**
      * Polunetsinnän käynnistäminen massa-ajona
      */

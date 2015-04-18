@@ -33,8 +33,10 @@ public class Verkko {
      * Verkon päätepiste, piste B, eli "maali"
      */
     public Solmu maali;
+    public Solmu alkupiste;
     private Verkko RakennaVerkko(int n, Solmu alkupiste, Solmu maali) {
-
+        this.maali = maali;
+        
         int x = n;
         int y = n;
         Solmut = new Solmu[x][y];
@@ -45,6 +47,7 @@ public class Verkko {
                 //alkupiste
                 if(alkupiste.getX() == i && alkupiste.getY() == j){
                 Solmut[i][j].OnAlkupiste = true;
+                this.alkupiste = Solmut[i][j];
                 }
                 if(maali.getX() == i && maali.getY() == j){
                 Solmut[i][j].setMaali(true);
@@ -85,7 +88,18 @@ public class Verkko {
         }else{
             this.Solmut[x][y].setOnEste(false);
         }
+    }
+    // todo: refakrotoi alkupisteen asetus käyttämään vain tätä
+    public void AsetaAlkupiste(int x, int y){
+        Solmu kandidaatti = this.Solmut[x][y];
         
+        if(!kandidaatti.isOnEste() && !kandidaatti.isMaali() && !kandidaatti.isOnAlkupiste() ){
+            this.Solmut[x][y].setOnAlkupiste(true);
+            
+            // poistetaan edellinen alkupiste
+            this.alkupiste.setMaali(false);
+            this.alkupiste = this.Solmut[x][y];
+        }
     }
 
 }
