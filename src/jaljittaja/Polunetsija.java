@@ -5,6 +5,10 @@
  */
 package jaljittaja;
 
+import jaljittaja.tietorakenteet.Prioriteettijono;
+import jaljittaja.tietorakenteet.Lista;
+import jaljittaja.verkko.Verkko;
+import jaljittaja.verkko.Solmu;
 import Tilastointi.SuorituksenInfo;
 import jaljittajaUI.Verkkonakyma;
 import java.awt.Graphics;

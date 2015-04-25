@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jaljittaja;
+package jaljittaja.verkko;
 
 /**
  * Verkon solmu

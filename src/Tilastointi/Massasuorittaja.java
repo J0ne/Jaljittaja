@@ -5,10 +5,11 @@
  */
 package Tilastointi;
 
-import jaljittaja.Lista;
+import IOTyökalut.CSVKirjoittaja;
+import jaljittaja.tietorakenteet.Lista;
 import jaljittaja.Polunetsija;
-import jaljittaja.Solmu;
-import jaljittaja.Verkko;
+import jaljittaja.verkko.Solmu;
+import jaljittaja.verkko.Verkko;
 import java.util.Date;
 
 /**
@@ -22,8 +23,9 @@ public class Massasuorittaja {
     Lista<SuorituksenInfo> suoritustenData = new Lista<>();
     /**
      * Ajetaan useampi etsintä silmukassa.
+     * @return info
      */
-    public void Aja() {
+    public String Aja() {
         // todo: nämä parametreiksi
         Solmu alkupiste = new Solmu(1, 1, false, true);
         Solmu maali = new Solmu(45, 45, false);
@@ -54,5 +56,9 @@ public class Massasuorittaja {
             
         }
         int suoritukset = suoritustenData.AlkioidenMaara();
+        
+        String tiedostonNimi = System.getProperty("user.home") + "/polunetsija.csv";
+        CSVKirjoittaja.kirjoitaCSVTiedosto(tiedostonNimi, suoritustenData);
+        return "Suoritus onnistui. Tiedosto: " + tiedostonNimi; 
     }
 }

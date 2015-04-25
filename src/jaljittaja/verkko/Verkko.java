@@ -4,7 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jaljittaja;
+package jaljittaja.verkko;
 
 /**
  * Suuntaamaton verkko (n x n matriisi), joka muodostuu solmuista ja kaarista

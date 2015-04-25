@@ -6,9 +6,9 @@
 package jaljittajaUI;
 
 import jaljittaja.Jaljittaja;
-import jaljittaja.Lista;
-import jaljittaja.Solmu;
-import jaljittaja.Verkko;
+import jaljittaja.tietorakenteet.Lista;
+import jaljittaja.verkko.Solmu;
+import jaljittaja.verkko.Verkko;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -28,7 +28,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.plaf.basic.BasicArrowButton;
 
 /**
  *
@@ -42,7 +41,9 @@ public class Verkkonakyma extends JFrame {
     JPanel jpanel;
     JButton start;
     JButton btnHiirimoodi;
+    JButton btnAjaMassana;
     JLabel lblHiirimoodi;
+    JLabel lblMassaAjonInfo;
     Solmu maali = null;
     JTextArea txtVerkonKoko;
     JTextArea txtAlkupiste;
@@ -79,6 +80,7 @@ public class Verkkonakyma extends JFrame {
         jpanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
         jpanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
         txtArea = new JTextArea(1, 8);
+        lblMassaAjonInfo = new JLabel();
         btnHiirimoodi = new JButton("Aseta");
         lblHiirimoodi = new JLabel();
         VaihdaHiirimoodia();
@@ -105,6 +107,11 @@ public class Verkkonakyma extends JFrame {
                 Solmu kasiteltava = verkko.Solmut[x][y];
                 kasiteltavaL.Lisaa(kasiteltava);
                 switch(hiirimoodi){
+                    case 0:
+                        
+                        PiirraSolmut(kasiteltavaL, g, 3);
+                        verkko.AsetaAlkupiste(x,y);
+                        break;
                     case 2:
                         PiirraSolmut(kasiteltavaL, g, 10);
                         verkko.AsetaEste(x, y);
@@ -124,7 +131,7 @@ public class Verkkonakyma extends JFrame {
                 Graphics2D g = (Graphics2D) getGraphics();
                 paint(g);
 //                Jaljittaja.KaynnistaMassaAjona();
-                 Jaljittaja.Kaynnista();
+                 Jaljittaja.Kaynnista(verkko);
 //                if(maaliLista.AlkioidenMaara() > 0){
 //                    Jaljittaja.Kaynnista(maaliLista.AnnaAlkio(0));
 //                }
@@ -140,12 +147,21 @@ public class Verkkonakyma extends JFrame {
                 VaihdaHiirimoodia();
             }
         });
+        btnAjaMassana = new JButton("Suorita massa-ajona taustalla");
+        btnAjaMassana.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Jaljittaja.KaynnistaMassaAjona();
+            }
+        });
+        
         jpanel.add(start);
         jpanel.add(txtArea);
-
+        
         jpanel.add(btnHiirimoodi);
         jpanel.add(lblHiirimoodi);
-
+        jpanel.add(btnAjaMassana);
+        jpanel.add(lblMassaAjonInfo);
         this.add(jpanel);
 
         addWindowListener(new WindowAdapter() {
@@ -155,7 +171,9 @@ public class Verkkonakyma extends JFrame {
             }
         });
     }
-
+    public void setMassaAjonInfoteksti(String info){
+        lblMassaAjonInfo.setText(info);
+    }
     private void VaihdaHiirimoodia() {
         this.setHiirimoodi();
         switch (this.getHiirimoodi()) {

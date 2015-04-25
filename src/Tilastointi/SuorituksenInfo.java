@@ -47,6 +47,10 @@ public class SuorituksenInfo {
     boolean polkuLoytyi;
     double suorituksenKesto;
 
+    public double getSuorituksenKesto() {
+        return suorituksenKesto;
+    }
+
     /**
      * Suorituksen kesto tiedetään vasta suorituksen päätyttyä, joten sen asettamiseen oma metodinsa
      * @param suorituksenKesto
