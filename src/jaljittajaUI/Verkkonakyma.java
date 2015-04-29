@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,6 +46,8 @@ public class Verkkonakyma extends JFrame {
     JButton btnAjaMassana;
     JLabel lblHiirimoodi;
     JLabel lblMassaAjonInfo;
+    JCheckBox cbLiikkuvaMaali;
+    JLabel lblLiikkuvaMaali;
     Solmu maali = null;
     JTextArea txtVerkonKoko;
     JTextArea txtAlkupiste;
@@ -77,12 +81,14 @@ public class Verkkonakyma extends JFrame {
         jpanel = new JPanel();
         jpanel.setAlignmentX(TOP_ALIGNMENT);
         jpanel.setAlignmentY(TOP_ALIGNMENT);
-        jpanel.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        jpanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         jpanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
         txtArea = new JTextArea(1, 8);
         lblMassaAjonInfo = new JLabel();
         btnHiirimoodi = new JButton("Aseta");
         lblHiirimoodi = new JLabel();
+        cbLiikkuvaMaali = new JCheckBox();
+        lblLiikkuvaMaali = new JLabel("Liikkuva maali:");
         VaihdaHiirimoodia();
         jpanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -130,8 +136,8 @@ public class Verkkonakyma extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Graphics2D g = (Graphics2D) getGraphics();
                 paint(g);
-//                Jaljittaja.KaynnistaMassaAjona();
-                 Jaljittaja.Kaynnista(verkko);
+                boolean liikkuvaMaali = cbLiikkuvaMaali.isSelected();
+                 Jaljittaja.Kaynnista(verkko, liikkuvaMaali);
 //                if(maaliLista.AlkioidenMaara() > 0){
 //                    Jaljittaja.Kaynnista(maaliLista.AnnaAlkio(0));
 //                }
@@ -154,7 +160,8 @@ public class Verkkonakyma extends JFrame {
                 Jaljittaja.KaynnistaMassaAjona();
             }
         });
-        
+        jpanel.add(lblLiikkuvaMaali);
+        jpanel.add(cbLiikkuvaMaali);
         jpanel.add(start);
         jpanel.add(txtArea);
         
