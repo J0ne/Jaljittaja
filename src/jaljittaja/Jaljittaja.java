@@ -9,10 +9,6 @@ package jaljittaja;
 import jaljittaja.verkko.Verkko;
 import jaljittaja.verkko.Solmu;
 import Tilastointi.Massasuorittaja;
-import jaljittajaUI.Verkkonakyma;
-import java.awt.Graphics;
-import java.util.ArrayList;
-import sun.awt.X11.XConstants;
 
 /**
  * Jaljittaja-luokka, josta ohjelma käynnistetään halutulla tavalla

@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -98,13 +97,6 @@ public class Verkkonakyma extends JFrame {
                     return;
                 }
                 KasitteleKlikkaus(xy.getX(), xy.getY());
-//                setText(xy.getX() + ", " + xy.getY());
-//                maali = new Solmu(xy.getX(), xy.getY(), false, false);
-//                maali.setMaali(true);
-//                Graphics2D g = (Graphics2D) getGraphics();
-//                maaliLista = new Lista<Solmu>();
-//                maaliLista.Lisaa(maali);
-//                PiirraSolmut(maaliLista, g, 1);
             }
 
             private void KasitteleKlikkaus(int x, int y) {
@@ -112,11 +104,11 @@ public class Verkkonakyma extends JFrame {
                 Lista<Solmu> kasiteltavaL = new Lista<Solmu>();
                 Solmu kasiteltava = verkko.Solmut[x][y];
                 kasiteltavaL.Lisaa(kasiteltava);
-                switch(hiirimoodi){
+                switch (hiirimoodi) {
                     case 0:
-                        
+
                         PiirraSolmut(kasiteltavaL, g, 3);
-                        verkko.AsetaAlkupiste(x,y);
+                        verkko.AsetaAlkupiste(x, y);
                         break;
                     case 2:
                         PiirraSolmut(kasiteltavaL, g, 10);
@@ -125,8 +117,7 @@ public class Verkkonakyma extends JFrame {
                     default:
                         break;
                 }
-                    
-                  
+
             }
 
         });
@@ -137,13 +128,8 @@ public class Verkkonakyma extends JFrame {
                 Graphics2D g = (Graphics2D) getGraphics();
                 paint(g);
                 boolean liikkuvaMaali = cbLiikkuvaMaali.isSelected();
-                 Jaljittaja.Kaynnista(verkko, liikkuvaMaali);
-//                if(maaliLista.AlkioidenMaara() > 0){
-//                    Jaljittaja.Kaynnista(maaliLista.AnnaAlkio(0));
-//                }
-//                else{
-//                    Jaljittaja.Kaynnista();
-//                }
+                Jaljittaja.Kaynnista(verkko, liikkuvaMaali);
+
             }
         });
         btnHiirimoodi.addActionListener(new ActionListener() {
@@ -164,7 +150,7 @@ public class Verkkonakyma extends JFrame {
         jpanel.add(cbLiikkuvaMaali);
         jpanel.add(start);
         jpanel.add(txtArea);
-        
+
         jpanel.add(btnHiirimoodi);
         jpanel.add(lblHiirimoodi);
         jpanel.add(btnAjaMassana);
@@ -172,15 +158,18 @@ public class Verkkonakyma extends JFrame {
         this.add(jpanel);
 
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
                 System.exit(0);
             }
         });
     }
-    public void setMassaAjonInfoteksti(String info){
+
+    public void setMassaAjonInfoteksti(String info) {
         lblMassaAjonInfo.setText(info);
     }
+
     private void VaihdaHiirimoodia() {
         this.setHiirimoodi();
         switch (this.getHiirimoodi()) {
@@ -221,7 +210,6 @@ public class Verkkonakyma extends JFrame {
     }
 
     private Koordinaatit annaSijaintiMatriisissa(Point point) {
-
         int sivu = this.verkko.Solmut.length;
         int x = (((int) point.getX() - 150) / PITUUS);
         int y = (((int) point.getY() - 170) / KORKEUS);
@@ -262,8 +250,6 @@ public class Verkkonakyma extends JFrame {
     }
 
     public void PiirraSolmut(Lista<Solmu> solmutLista, Graphics g, int tila) {
-
-        //ArrayList<Solmu> solmutArrayList = solmutLista.AnnaListaArrayListina();
         Graphics2D g2d = (Graphics2D) g;
         int i = 0;
         int tempI = 0;
@@ -287,7 +273,6 @@ public class Verkkonakyma extends JFrame {
                             }
 
                         } else {
-                            //PiirraSolmu(g2d, i, j, nimi, 0);
                             PiirraSolmu(g2d, i, j, nimi, 4);
                         }
 

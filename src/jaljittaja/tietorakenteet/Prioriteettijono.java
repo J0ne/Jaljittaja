@@ -6,23 +6,23 @@
 package jaljittaja.tietorakenteet;
 
 import jaljittaja.verkko.Solmu;
-import java.util.ArrayList;
 
 /**
  * Priotiteettijono, jonka prioriteetti perustuu solmun F-arvoon
+ *
  * @author jouni
  */
 public class Prioriteettijono {
 
     /**
-     * 
+     *
      * @return
      */
     private Lista<Solmu> getLista() {
         if (lista != null) {
             return lista;
         } else {
-            lista = new Lista<Solmu>();
+            lista = new Lista<>();
             return lista;
         }
     }
@@ -31,6 +31,7 @@ public class Prioriteettijono {
 
     /**
      * Lisää alkion listaan
+     *
      * @param lisattava
      */
     public void LisaaListaan(Solmu lisattava) {
@@ -42,6 +43,7 @@ public class Prioriteettijono {
 
     /**
      * Antaa listan pienimmän F-arvon omaavan solmun ja poistaa sen listasta
+     *
      * @return
      */
     public Solmu AnnaSolmu() {
@@ -59,11 +61,12 @@ public class Prioriteettijono {
         lista.PoistaListasta(palautettava);
         return palautettava;
     }
-    
+
     private Lista<Solmu> lista;
 
     /**
      * Poistaa parametrina annetun solmun listasta
+     *
      * @param solmu
      */
     public void PoistaSolmu(Solmu solmu) {
@@ -72,6 +75,7 @@ public class Prioriteettijono {
 
     /**
      * Palauttaa lista koon
+     *
      * @return
      */
     public int ListanKoko() {
@@ -79,8 +83,9 @@ public class Prioriteettijono {
     }
 
     /**
-     * Palauttaa listan indeksin, jossa annettu solmu on. 
-     * Jos solmua ei ole listassa, palauttaa -1
+     * Palauttaa listan indeksin, jossa annettu solmu on. Jos solmua ei ole
+     * listassa, palauttaa -1
+     *
      * @param solmu
      * @return
      */
