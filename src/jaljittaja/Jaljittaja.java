@@ -6,6 +6,7 @@
  */
 package jaljittaja;
 
+import IOTyökalut.CSVKirjoittaja;
 import jaljittaja.verkko.Verkko;
 import jaljittaja.verkko.Solmu;
 import Tilastointi.Massasuorittaja;
@@ -65,11 +66,33 @@ public class Jaljittaja {
         etsija.EtsiLyhinPolku(matriisi.alkupiste, matriisi.maali, liikkuvaMaali);
     }
     /**
-     * Polunetsinnän käynnistäminen massa-ajona
+     * Polunetsinnän käynnistäminen massa-ajona.
+     * HUOM! Aja-metodin kutsujan vastuulla asettaa järkevät parametrit
+     * Ei syötteen tarkistuksia!
      */
-    public static void KaynnistaMassaAjona(){
+    public static void KaynnistaMassaAjona(boolean kirjoitaTiedostoon){
+        
+        // I ajo
+        int verkonSivu = 10; // -> 10 * 10 = 100 solmua
+        int kierrokset = 100;
+        Solmu alkupiste = new Solmu(1, 1, false, true);
+        Solmu maali = new Solmu(5, 5, false);
+        
         Massasuorittaja suorittaja = new Massasuorittaja();
-        String info =  suorittaja.Aja();
+        String info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, true);
+        
         Polunetsija.nakyma.setMassaAjonInfoteksti(info);
+        
+        // II ajo
+        verkonSivu = 100;
+        maali = new Solmu(80, 80, false);
+        info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, true);
+        Polunetsija.nakyma.setMassaAjonInfoteksti(info);
+        if(kirjoitaTiedostoon){
+          String tiedostonNimi = System.getProperty("user.home") + "/polunetsija.csv";
+          CSVKirjoittaja.kirjoitaCSVTiedosto(tiedostonNimi, suorittaja.getSuoritustenData());
+          Polunetsija.nakyma.setMassaAjonInfoteksti("Raaka-data tiedostossa: " +tiedostonNimi);
+        }
+
     }
 }

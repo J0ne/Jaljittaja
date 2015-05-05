@@ -11,6 +11,7 @@ import jaljittaja.verkko.Solmu;
 import jaljittaja.verkko.Verkko;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -40,12 +41,14 @@ public class Verkkonakyma extends JFrame {
     private final int KORKEUS = 35;
     JTextArea txtArea;
     JPanel jpanel;
+    JPanel jpanel2;
     JButton start;
     JButton btnHiirimoodi;
     JButton btnAjaMassana;
     JLabel lblHiirimoodi;
     JLabel lblMassaAjonInfo;
-    JCheckBox cbLiikkuvaMaali;
+    JLabel lblKirjoitaCsv;
+    JCheckBox cbLiikkuvaMaali, cbKirjoitaTiedostoon;
     JLabel lblLiikkuvaMaali;
     Solmu maali = null;
     JTextArea txtVerkonKoko;
@@ -82,11 +85,16 @@ public class Verkkonakyma extends JFrame {
         jpanel.setAlignmentY(TOP_ALIGNMENT);
         jpanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         jpanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
-        txtArea = new JTextArea(1, 8);
+
+        txtArea = new JTextArea(4, 50);
         lblMassaAjonInfo = new JLabel();
+        lblMassaAjonInfo.setBackground(Color.WHITE);
+        
         btnHiirimoodi = new JButton("Aseta");
         lblHiirimoodi = new JLabel();
         cbLiikkuvaMaali = new JCheckBox();
+        lblKirjoitaCsv = new JLabel("Kirjoita tulos csv-tiedostoon");
+        cbKirjoitaTiedostoon = new JCheckBox();
         lblLiikkuvaMaali = new JLabel("Liikkuva maali:");
         VaihdaHiirimoodia();
         jpanel.addMouseListener(new MouseAdapter() {
@@ -143,19 +151,31 @@ public class Verkkonakyma extends JFrame {
         btnAjaMassana.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Jaljittaja.KaynnistaMassaAjona();
+                boolean kirjoitaCsv = cbKirjoitaTiedostoon.isSelected();
+                Jaljittaja.KaynnistaMassaAjona(kirjoitaCsv);
             }
         });
         jpanel.add(lblLiikkuvaMaali);
         jpanel.add(cbLiikkuvaMaali);
         jpanel.add(start);
-        jpanel.add(txtArea);
-
         jpanel.add(btnHiirimoodi);
         jpanel.add(lblHiirimoodi);
-        jpanel.add(btnAjaMassana);
-        jpanel.add(lblMassaAjonInfo);
+        
+        jpanel2 = new JPanel();
+        jpanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
+        jpanel2.setAlignmentX(TOP_ALIGNMENT);
+        jpanel2.setAlignmentY(TOP_ALIGNMENT);
+        jpanel2.add(btnAjaMassana);
+        jpanel2.add(lblMassaAjonInfo);
+        
+        jpanel2.add(new JLabel("Massa-ajon info"));
+        txtArea.setEditable(false);
+        jpanel2.add(txtArea);
+        jpanel2.add(cbKirjoitaTiedostoon);
+        jpanel2.add(lblKirjoitaCsv);
+        jpanel.add(jpanel2);
         this.add(jpanel);
+        //this.add(jpanel2);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -167,7 +187,10 @@ public class Verkkonakyma extends JFrame {
     }
 
     public void setMassaAjonInfoteksti(String info) {
-        lblMassaAjonInfo.setText(info);
+        String temptxt = txtArea.getText();
+        temptxt += "\n" + info;
+        //lblMassaAjonInfo.setText(temptxt);
+        txtArea.setText(temptxt);
     }
 
     private void VaihdaHiirimoodia() {

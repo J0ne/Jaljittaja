@@ -21,24 +21,33 @@ import java.util.Date;
 public class Massasuorittaja {
 
     Lista<SuorituksenInfo> suoritustenData = new Lista<>();
+
+    public Lista<SuorituksenInfo> getSuoritustenData() {
+        return suoritustenData;
+    }
+
+    public void setSuoritustenData(Lista<SuorituksenInfo> suoritustenData) {
+        this.suoritustenData = suoritustenData;
+    }
     /**
      * Ajetaan useampi etsintä silmukassa.
+     * @param alkupiste
+     * @param maali
+     * @param verkonKoko
+     * @param kierrokset
+     * @param liikkuvaMaali
      * @return info
      */
-    public String Aja() {
-        // todo: nämä parametreiksi
-        Solmu alkupiste = new Solmu(1, 1, false, true);
-        Solmu maali = new Solmu(45, 45, false);
-        maali.setMaali(true);
-
+    public String Aja(Solmu alkupiste, Solmu maali, int verkonKoko, int kierrokset, boolean liikkuvaMaali) {
         
-        for (int i = 0; i < 50; i++) {
-            Verkko verkko = new Verkko(50, alkupiste, maali);
+        maali.setMaali(true);
+        for (int i = 0; i < kierrokset; i++) {
+            Verkko verkko = new Verkko(verkonKoko, alkupiste, maali);
             Polunetsija etsija = new Polunetsija(verkko, false);
             boolean polkuLoytyi = false;
             Date startTime = new Date();
             
-            Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, true);
+            Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
             
             if (lyhinPolku != null) {
 //                System.out.println("Löytyi " + lyhinPolku.toString());
@@ -50,15 +59,14 @@ public class Massasuorittaja {
             tietorivi.suorituksenKesto = suorituksenKesto;
             tietorivi.setPolkuLoytyi(polkuLoytyi);
             suoritustenData.Lisaa(tietorivi);
-        }
-        for (SuorituksenInfo suoritustenData1 : suoritustenData) {
-            System.out.println(suoritustenData1.toString());
-            
-        }
+          }
+//        for (SuorituksenInfo suoritustenData1 : suoritustenData) {
+//            System.out.println(suoritustenData1.toString());
+//            
+//        }
         int suoritukset = suoritustenData.AlkioidenMaara();
         
-        String tiedostonNimi = System.getProperty("user.home") + "/polunetsija.csv";
-        CSVKirjoittaja.kirjoitaCSVTiedosto(tiedostonNimi, suoritustenData);
-        return "Suoritus onnistui. Tiedosto: " + tiedostonNimi; 
+        return "Verkon sivu: " + verkonKoko +", kierroksia " + kierrokset + ", suorituksia (kumul.)" + suoritukset + 
+                ", polku löytyi (%)" + " TODO:"; 
     }
 }
