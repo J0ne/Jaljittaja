@@ -17,7 +17,8 @@ public class SuorituksenInfo {
     }
 
     public void setVerkonKoko(int verkonKoko) {
-        this.verkonKoko = verkonKoko;
+        
+        this.verkonKoko = verkonKoko * verkonKoko;
     }
 
     public boolean isPolkuLoytyi() {
@@ -64,7 +65,7 @@ public class SuorituksenInfo {
 
     @Override
     public String toString() {
-        return "SuorituksenInfo{" + "verkonKoko=" + verkonKoko + ", polkuLoytyi=" + polkuLoytyi + ", suorituksenKesto=" + suorituksenKesto + ", lapikaydytSolmut=" + lapikaydytSolmut + ", maalinStepit=" + maalinStepit + '}';
+        return "SuorituksenInfo{" + "verkonKoko=" + getVerkonKoko() + ", polkuLoytyi=" + polkuLoytyi + ", suorituksenKesto=" + suorituksenKesto + ", lapikaydytSolmut=" + lapikaydytSolmut + ", maalinStepit=" + maalinStepit + '}';
     }
     
 }

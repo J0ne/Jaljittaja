@@ -39,6 +39,8 @@ public class CSVKirjoittaja {
                 tiedostokirjoittaja.append(EROTINMERKKI);
                 tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getSuorituksenKesto()));
                 tiedostokirjoittaja.append(EROTINMERKKI);
+                tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getLapikaydytSolmut()));
+                tiedostokirjoittaja.append(EROTINMERKKI);
                 tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getMaalinStepit()));
                 tiedostokirjoittaja.append(RIVINVAIHTO);
 

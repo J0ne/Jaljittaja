@@ -102,7 +102,7 @@ public class Polunetsija {
         Solmu tmp = maali;
 
         while (avoinLista.ListanKoko() != 0) {
-            kasitellytSolmut++;
+            
             // otetaan listasta solmu, jolla on pienin F-arvo
             Solmu kasittelyssaOleva = avoinLista.AnnaSolmu();
             suljettuLista.Lisaa(kasittelyssaOleva);

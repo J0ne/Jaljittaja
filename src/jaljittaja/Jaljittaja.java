@@ -73,21 +73,23 @@ public class Jaljittaja {
     public static void KaynnistaMassaAjona(boolean kirjoitaTiedostoon){
         
         // I ajo
-        int verkonSivu = 10; // -> 10 * 10 = 100 solmua
-        int kierrokset = 100;
+        int verkonSivu = 5; // -> 10 * 10 = 100 solmua
+        int kierrokset = 10;
         Solmu alkupiste = new Solmu(1, 1, false, true);
-        Solmu maali = new Solmu(5, 5, false);
-        
+        Solmu maali = new Solmu(4, 4, false);
+        boolean liikkuvaMaali = true;
         Massasuorittaja suorittaja = new Massasuorittaja();
-        String info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, true);
+        String info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, liikkuvaMaali);
         
         Polunetsija.nakyma.setMassaAjonInfoteksti(info);
         
         // II ajo
-        verkonSivu = 100;
-        maali = new Solmu(80, 80, false);
-        info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, true);
-        Polunetsija.nakyma.setMassaAjonInfoteksti(info);
+//        verkonSivu = 100;
+//        maali = new Solmu(80, 80, false);
+//        info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, liikkuvaMaali);
+//        Polunetsija.nakyma.setMassaAjonInfoteksti(info);
+//        
+//        
         if(kirjoitaTiedostoon){
           String tiedostonNimi = System.getProperty("user.home") + "/polunetsija.csv";
           CSVKirjoittaja.kirjoitaCSVTiedosto(tiedostonNimi, suorittaja.getSuoritustenData());
