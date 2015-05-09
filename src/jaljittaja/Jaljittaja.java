@@ -36,7 +36,17 @@ public class Jaljittaja {
     private static Solmu maali;
     private static Polunetsija etsija;
     private static Verkko matriisi;
+    
+    public static void Alusta(){
+        alkupiste = new Solmu(0, 8, false, true);
+        maali = new Solmu(9, 8, false);
+        maali.setMaali(true);
 
+        matriisi = new Verkko(10, alkupiste, maali);
+        
+        etsija = new Polunetsija(matriisi);
+    }
+    
     /**
      * Polunetsinnän käynnistävä metodi valmiilla, kovakoodatuilla syötteillä
      */
@@ -58,7 +68,8 @@ public class Jaljittaja {
     }
         /**
      * Polunetsinnän käynnistävä metodi, jonka avulla maali voidaan antaa parametrina
-     * @param uusiMaali
+     * @param verkko
+     * @param liikkuvaMaali
      */
     public static void Kaynnista(Verkko verkko, boolean liikkuvaMaali) {
         matriisi = verkko;
@@ -69,14 +80,15 @@ public class Jaljittaja {
      * Polunetsinnän käynnistäminen massa-ajona.
      * HUOM! Aja-metodin kutsujan vastuulla asettaa järkevät parametrit
      * Ei syötteen tarkistuksia!
+     * @param kirjoitaTiedostoon
      */
     public static void KaynnistaMassaAjona(boolean kirjoitaTiedostoon){
         
         // I ajo
-        int verkonSivu = 5; // -> 10 * 10 = 100 solmua
+        int verkonSivu = 10; // -> 10 * 10 = 100 solmua
         int kierrokset = 10;
         Solmu alkupiste = new Solmu(1, 1, false, true);
-        Solmu maali = new Solmu(4, 4, false);
+        Solmu maali = new Solmu(8, 8, false);
         boolean liikkuvaMaali = true;
         Massasuorittaja suorittaja = new Massasuorittaja();
         String info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, liikkuvaMaali);

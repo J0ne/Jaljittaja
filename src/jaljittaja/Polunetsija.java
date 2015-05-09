@@ -33,6 +33,8 @@ public class Polunetsija {
         this.verkko = verkko;
         if (nakyma == null) {
             nakyma = new Verkkonakyma(verkko);
+        }else{
+            nakyma.setVerkko(verkko);
         }
         piirretaanUI = true;
         g = nakyma.getGraphics();
