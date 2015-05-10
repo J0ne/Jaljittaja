@@ -55,6 +55,15 @@ public class Polunetsija {
         this.suoritusinfo.setVerkonKoko(verkko.Solmut.length ^ 2);
     }
 
+    int viive;
+    
+    public int getViive() {
+        return viive;
+    }
+
+    public void setViive(int viive) {
+        this.viive = viive;
+    }
     SuorituksenInfo suoritusinfo;
 
     /**
@@ -177,7 +186,7 @@ public class Polunetsija {
                 // pieni delay, jotta helpompi seurata UI:sta
                 if (piirretaanUI) {
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(getViive());
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Polunetsija.class.getName()).log(Level.SEVERE, null, ex);
                     }

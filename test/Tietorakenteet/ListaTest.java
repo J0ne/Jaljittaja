@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jaljittaja;
+package Tietorakenteet;
 
+import jaljittaja.tietorakenteet.Lista;
+import jaljittaja.verkko.Solmu;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.junit.After;
@@ -119,7 +121,6 @@ public class ListaTest {
         int expResult = 3;
         result = instance.AlkioidenMaara();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
     }
 
     /**
@@ -138,7 +139,6 @@ public class ListaTest {
         // negatiivinen assert - solmu2:a ei lisätty
         result = instance.OnkoAlkioListassa(solmu2);
         assertEquals(false, result);
-
     }
 
     /**

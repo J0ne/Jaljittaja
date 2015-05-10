@@ -37,13 +37,12 @@ public class Jaljittaja {
     private static Polunetsija etsija;
     private static Verkko matriisi;
     
-    public static void Alusta(){
-        alkupiste = new Solmu(0, 8, false, true);
-        maali = new Solmu(9, 8, false);
+    public static void Alusta(int verkonKoko){
+        alkupiste = new Solmu(0,0, false, true);
+        maali = new Solmu((int)(0.8*verkonKoko),(int)(0.8*verkonKoko), false);
         maali.setMaali(true);
 
-        matriisi = new Verkko(10, alkupiste, maali);
-        
+        matriisi = new Verkko(verkonKoko, alkupiste, maali);
         etsija = new Polunetsija(matriisi);
     }
     
@@ -71,9 +70,10 @@ public class Jaljittaja {
      * @param verkko
      * @param liikkuvaMaali
      */
-    public static void Kaynnista(Verkko verkko, boolean liikkuvaMaali) {
+    public static void Kaynnista(Verkko verkko, boolean liikkuvaMaali, int viive) {
         matriisi = verkko;
         etsija = new Polunetsija(matriisi);
+        etsija.setViive(viive);
         etsija.EtsiLyhinPolku(matriisi.alkupiste, matriisi.maali, liikkuvaMaali);
     }
     /**
@@ -82,14 +82,15 @@ public class Jaljittaja {
      * Ei syötteen tarkistuksia!
      * @param kirjoitaTiedostoon
      */
-    public static void KaynnistaMassaAjona(boolean kirjoitaTiedostoon){
-        
+    public static void KaynnistaMassaAjona(boolean kirjoitaTiedostoon, boolean liikkuvaMaali){
+        Polunetsija.nakyma.setMassaAjonInfoteksti("Liikkuva maali: " + liikkuvaMaali);
         // I ajo
         int verkonSivu = 10; // -> 10 * 10 = 100 solmua
         int kierrokset = 10;
-        Solmu alkupiste = new Solmu(1, 1, false, true);
-        Solmu maali = new Solmu(8, 8, false);
-        boolean liikkuvaMaali = true;
+        int xy = verkonSivu -1;
+        Solmu alkupiste = new Solmu(0, 0, false, true);
+        Solmu maali = new Solmu(xy,xy, false);
+        
         Massasuorittaja suorittaja = new Massasuorittaja();
         String info =  suorittaja.Aja(alkupiste, maali, verkonSivu, kierrokset, liikkuvaMaali);
         

@@ -5,6 +5,9 @@
  */
 package jaljittaja;
 
+import jaljittaja.tietorakenteet.Lista;
+import jaljittaja.verkko.Verkko;
+import jaljittaja.verkko.Solmu;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

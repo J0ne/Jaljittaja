@@ -43,6 +43,7 @@ public class Massasuorittaja {
 
         maali.setMaali(true);
         boolean[] onnistumisTilastoTmp = new boolean[kierrokset];
+        double[] kestojenTilastointi = new double[kierrokset];
         
         for (int i = 0; i < kierrokset; i++) {
             Verkko verkko = new Verkko(verkonKoko, alkupiste, maali);
@@ -60,20 +61,22 @@ public class Massasuorittaja {
 
             Date endTime = new Date();
             double suorituksenKesto = endTime.getTime() - startTime.getTime();
+            kestojenTilastointi[i] = suorituksenKesto;
             SuorituksenInfo tietorivi = etsija.getTietorivi();
             tietorivi.setVerkonKoko(verkonKoko);
             tietorivi.setSuorituksenKesto(suorituksenKesto);
             tietorivi.setPolkuLoytyi(polkuLoytyi);
             suoritustenData.Lisaa(tietorivi);
         }
-        float onnistumisprosentti = laskeOnnistumisprosentti(onnistumisTilastoTmp);
+        int onnistumisprosentti = laskeOnnistumisprosentti(onnistumisTilastoTmp);
+        double keskimaarainenSuoritusaika = laskeKeskiasrvo(kestojenTilastointi);
         int suoritukset = suoritustenData.AlkioidenMaara();
 
-        return "Verkon sivu: " + verkonKoko + ", kierroksia " + kierrokset + ", suorituksia (kumul.)" + suoritukset
-                + ", polku löytyi (%)" + onnistumisprosentti + " %";
+        return "Solmuja: " + verkonKoko*verkonKoko + ", kierroksia " + kierrokset
+                + ", polku löytyi " + onnistumisprosentti + "% suorituksista, aikaa/suoritus n " + keskimaarainenSuoritusaika + " ms";
     }
 
-    private float laskeOnnistumisprosentti(boolean[] onnistumisTilastoTmp) {
+    private int laskeOnnistumisprosentti(boolean[] onnistumisTilastoTmp) {
         int kokonaisMaara = onnistumisTilastoTmp.length;
         int onnistumiset = 0;
         for (boolean p : onnistumisTilastoTmp) {
@@ -81,6 +84,14 @@ public class Massasuorittaja {
                 onnistumiset++;
             }
         }
-        return (float) (onnistumiset  * 100 ) / kokonaisMaara;
+        return onnistumiset  * 100 / kokonaisMaara;
+    }
+
+    private double laskeKeskiasrvo(double[] kestojenTilastointi) {
+        double kaikki = 0;
+        for (double aika : kestojenTilastointi) {
+            kaikki+=aika;
+        }
+        return kaikki / kestojenTilastointi.length;
     }
 }
