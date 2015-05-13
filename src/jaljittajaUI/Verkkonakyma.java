@@ -61,7 +61,7 @@ public class Verkkonakyma extends JFrame {
 
     private int PITUUS = 40;
     private int KORKEUS = 30;
-    JTextArea txtArea; 
+    JTextArea txtArea;
     JLabel lblOhjeet;
     JPanel pnlInfo;
     JPanel jpanel;
@@ -81,10 +81,9 @@ public class Verkkonakyma extends JFrame {
     Lista<Solmu> maaliLista;
     private int hiirimoodi = 0;
     JComboBox<Integer> verkonKoko = new JComboBox<>();
-    
 
-    
     JComboBox<Integer> nopeus = new JComboBox<>();
+
     public int getHiirimoodi() {
         return hiirimoodi;
     }
@@ -93,7 +92,7 @@ public class Verkkonakyma extends JFrame {
         if (this.hiirimoodi > 1) {
             this.hiirimoodi = 0;
         } else {
-            hiirimoodi++;
+            hiirimoodi += 1;
         }
     }
 
@@ -121,7 +120,8 @@ public class Verkkonakyma extends JFrame {
         verkonKoko.addItem(20);
         verkonKoko.addItem(50);
         verkonKoko.addItem(100);
-        
+
+        verkonKoko.setSelectedItem(20);
         nopeus.addItem(0);
         nopeus.addItem(3);
         nopeus.addItem(7);
@@ -135,9 +135,9 @@ public class Verkkonakyma extends JFrame {
 //                        +"</html>");
 //        pnlInfo.add(lblOhjeet);
         txtArea = new JTextArea(4, 50);
-        
+
         lblMassaAjonInfo = new JLabel();
-        
+
         JScrollPane scroller = new JScrollPane(txtArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         btnHiirimoodi = new JButton("Aseta");
         lblHiirimoodi = new JLabel();
@@ -163,14 +163,24 @@ public class Verkkonakyma extends JFrame {
             private void KasitteleKlikkaus(int x, int y) {
                 Graphics2D g = (Graphics2D) getGraphics();
                 Lista<Solmu> kasiteltavaL = new Lista<Solmu>();
+                Lista<Solmu> vanhaL = new Lista<Solmu>();
+                Solmu vanhakohde = null;
                 Solmu kasiteltava = getVerkko().Solmut[x][y];
                 kasiteltavaL.Lisaa(kasiteltava);
                 switch (hiirimoodi) {
                     case 0:
-
+                        vanhakohde = getVerkko().alkupiste;
+                        vanhakohde.setOnAlkupiste(false);
+                        vanhaL.Lisaa(verkko.alkupiste);
+                        kasiteltavaL.Lisaa(vanhakohde);
                         PiirraSolmut(kasiteltavaL, g, 3);
                         getVerkko().AsetaAlkupiste(x, y);
                         break;
+                    case 1:
+                        vanhakohde = getVerkko().maali;
+                        vanhakohde.setMaali(false);
+                        PiirraSolmut(kasiteltavaL, g, 4);
+                        getVerkko().AsetaMaalinSijainti(x, y);
                     case 2:
                         PiirraSolmut(kasiteltavaL, g, 10);
                         getVerkko().AsetaEste(x, y);
@@ -179,6 +189,8 @@ public class Verkkonakyma extends JFrame {
                         break;
                 }
 
+                vanhaL.Lisaa(vanhakohde);
+                PiirraSolmut(vanhaL, g, 0);
             }
 
         });
@@ -186,36 +198,36 @@ public class Verkkonakyma extends JFrame {
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                txtArea.setText("");
                 Graphics2D g = (Graphics2D) getGraphics();
                 paint(g);
                 boolean liikkuvaMaali = cbLiikkuvaMaali.isSelected();
-                int viiveMs = (int)nopeus.getSelectedItem();
+                int viiveMs = (int) nopeus.getSelectedItem();
+
                 Jaljittaja.Kaynnista(getVerkko(), liikkuvaMaali, viiveMs);
 
             }
         });
-        
+
         //btnAlusta = new JButton("Päivitä");
         verkonKoko.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 txtArea.setText("");
-                int verkonSivu = (int)verkonKoko.getSelectedItem();
-                if(verkonSivu < 50){
+                int verkonSivu = (int) verkonKoko.getSelectedItem();
+                if (verkonSivu < 50) {
                     setKORKEUS(30);
                     setPITUUS(40);
-                }
-                else
-                {
+                } else {
                     setKORKEUS(7);
                     setPITUUS(10);
                 }
                 Jaljittaja.Alusta(verkonSivu);
-                Graphics2D g = (Graphics2D) getGraphics();  
+                Graphics2D g = (Graphics2D) getGraphics();
                 paint(g);
             }
         });
-        
+
         btnHiirimoodi.addActionListener(new ActionListener() {
 
             @Override
@@ -229,24 +241,23 @@ public class Verkkonakyma extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 boolean kirjoitaCsv = cbKirjoitaTiedostoon.isSelected();
                 boolean liikkuvaMaali = cbLiikkuvaMaali.isSelected();
-                Jaljittaja.KaynnistaMassaAjona(kirjoitaCsv,liikkuvaMaali);
+                Jaljittaja.KaynnistaMassaAjona(kirjoitaCsv, liikkuvaMaali);
             }
         });
-jpanel.add(pnlInfo);
+        jpanel.add(pnlInfo);
         jpanel.add(lblLiikkuvaMaali);
         jpanel.add(cbLiikkuvaMaali);
         jpanel.add(btnHiirimoodi);
         jpanel.add(lblHiirimoodi);
-        
+
         jpanel.add(new JLabel("Verkon sivu:"));
         jpanel.add(verkonKoko);
 
-        
         //jpanel.add(btnAlusta);
         jpanel.add(new JLabel("Näytön nopeus (ms): "));
         jpanel.add(nopeus);
         start.setBorder(new BasicBorders.ButtonBorder(Color.yellow, Color.GREEN, Color.lightGray, Color.blue));
-                start.setBorderPainted(true);
+        start.setBorderPainted(true);
         jpanel.add(start);
         jpanel2 = new JPanel();
         jpanel2.setLocation(150, 800);
@@ -254,15 +265,14 @@ jpanel.add(pnlInfo);
 
         //jpanel2.set
         jpanel2.add(btnAjaMassana);
-        jpanel2.add(new JLabel("Massa-ajon info"));
-        jpanel2.add(scroller);
-        
+        jpanel2.add(new JLabel("Massa-ajon info: "));
+
         getContentPane().add(jpanel2, BorderLayout.SOUTH);
         txtArea.setEditable(false);
         jpanel2.add(txtArea);
         jpanel2.add(cbKirjoitaTiedostoon);
         jpanel2.add(lblKirjoitaCsv);
-        
+
         //jpanel.add(jpanel2);
         this.add(jpanel);
 
@@ -289,7 +299,7 @@ jpanel.add(pnlInfo);
                 btnHiirimoodi.setText("Aseta alkupiste");
                 break;
             case 1:
-                //lblHiirimoodi.setText("[ei valittu]");
+                btnHiirimoodi.setText("Aseta maali");
                 break;
             case 2:
                 btnHiirimoodi.setText("Aseta este");
@@ -449,7 +459,7 @@ jpanel.add(pnlInfo);
         if (state > -1) {
 
             g2d.setPaint(color);
-            g2d.fill(new Rectangle2D.Double(x1, y1, PITUUS-1, KORKEUS-1));
+            g2d.fill(new Rectangle2D.Double(x1, y1, PITUUS - 1, KORKEUS - 1));
             g2d.drawRect(x1, y1, PITUUS, KORKEUS);
         }
         g2d.setColor(Color.BLACK);
@@ -457,9 +467,9 @@ jpanel.add(pnlInfo);
         if (state == 1) {
             g2d.setColor(Color.WHITE);
         }
-        
+
         String lbl = "";
-        if(verkko.Solmut.length < 50){
+        if (verkko.Solmut.length < 50) {
             lbl = id;
         }
         g2d.drawString(lbl, x1 + 5, y1 + 25);

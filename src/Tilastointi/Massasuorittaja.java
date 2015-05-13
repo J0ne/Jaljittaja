@@ -42,21 +42,21 @@ public class Massasuorittaja {
     public String Aja(Solmu alkupiste, Solmu maali, int verkonKoko, int kierrokset, boolean liikkuvaMaali) {
 
         maali.setMaali(true);
-        boolean[] onnistumisTilastoTmp = new boolean[kierrokset];
+        int[] onnistumisTilastoTmp = new int[kierrokset];
         double[] kestojenTilastointi = new double[kierrokset];
         
         for (int i = 0; i < kierrokset; i++) {
             Verkko verkko = new Verkko(verkonKoko, alkupiste, maali);
             Polunetsija etsija = new Polunetsija(verkko, false);
-            boolean polkuLoytyi = false;
+            int polkuLoytyi = 0;
             Date startTime = new Date();
 
             Lista lyhinPolku = etsija.EtsiLyhinPolku(alkupiste, maali, liikkuvaMaali);
 
             if (lyhinPolku != null) {
 //                System.out.println("Löytyi " + lyhinPolku.toString());
-                polkuLoytyi = true;
-                onnistumisTilastoTmp[i] = true;
+                polkuLoytyi = 100;
+                onnistumisTilastoTmp[i] = polkuLoytyi;
             }
 
             Date endTime = new Date();
@@ -76,11 +76,11 @@ public class Massasuorittaja {
                 + ", polku löytyi " + onnistumisprosentti + "% suorituksista, aikaa/suoritus n " + keskimaarainenSuoritusaika + " ms";
     }
 
-    private int laskeOnnistumisprosentti(boolean[] onnistumisTilastoTmp) {
+    private int laskeOnnistumisprosentti(int[] onnistumisTilastoTmp) {
         int kokonaisMaara = onnistumisTilastoTmp.length;
         int onnistumiset = 0;
-        for (boolean p : onnistumisTilastoTmp) {
-            if (p) {
+        for (int p : onnistumisTilastoTmp) {
+            if (p== 100) {
                 onnistumiset++;
             }
         }

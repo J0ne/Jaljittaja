@@ -6,8 +6,9 @@
 package Tilastointi;
 
 /**
- * Yhden polunetsintä suorituksen info. Tämä vastaa yhtä riviä tulostettavassa  csv-tiedostossa
- * tai UI:ssa
+ * Yhden polunetsintä suorituksen info. Tämä vastaa yhtä riviä tulostettavassa
+ * csv-tiedostossa tai UI:ssa
+ *
  * @author jouni
  */
 public class SuorituksenInfo {
@@ -17,15 +18,15 @@ public class SuorituksenInfo {
     }
 
     public void setVerkonKoko(int verkonKoko) {
-        
+
         this.verkonKoko = verkonKoko * verkonKoko;
     }
 
-    public boolean isPolkuLoytyi() {
+    public int getPolkuLoytyi() {
         return polkuLoytyi;
     }
 
-    public void setPolkuLoytyi(boolean polkuLoytyi) {
+    public void setPolkuLoytyi(int polkuLoytyi) {
         this.polkuLoytyi = polkuLoytyi;
     }
 
@@ -45,7 +46,7 @@ public class SuorituksenInfo {
         this.maalinStepit = maalinStepit;
     }
     int verkonKoko;
-    boolean polkuLoytyi;
+    int polkuLoytyi;
     double suorituksenKesto;
 
     public double getSuorituksenKesto() {
@@ -53,7 +54,9 @@ public class SuorituksenInfo {
     }
 
     /**
-     * Suorituksen kesto tiedetään vasta suorituksen päätyttyä, joten sen asettamiseen oma metodinsa
+     * Suorituksen kesto tiedetään vasta suorituksen päätyttyä, joten sen
+     * asettamiseen oma metodinsa
+     *
      * @param suorituksenKesto
      */
     public void setSuorituksenKesto(double suorituksenKesto) {
@@ -67,5 +70,5 @@ public class SuorituksenInfo {
     public String toString() {
         return "SuorituksenInfo{" + "verkonKoko=" + getVerkonKoko() + ", polkuLoytyi=" + polkuLoytyi + ", suorituksenKesto=" + suorituksenKesto + ", lapikaydytSolmut=" + lapikaydytSolmut + ", maalinStepit=" + maalinStepit + '}';
     }
-    
+
 }

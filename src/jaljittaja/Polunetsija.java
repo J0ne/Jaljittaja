@@ -201,8 +201,14 @@ public class Polunetsija {
 
         return null;
     }
-
+    int liikeLaskuri;
     private Solmu LiikutaMaalia(Solmu vanhaMaali) {
+        liikeLaskuri++;
+        // hidastus
+//                if(liikeLaskuri % 3 != 0){
+//                return vanhaMaali;
+//                }
+                
         int max = this.verkko.Solmut.length - 1;
         Random rand = new Random();
         int x = 1 - rand.nextInt(3);
@@ -230,6 +236,9 @@ public class Polunetsija {
             uusiMaali = vanhaMaali;
         }
         maalinStepit++;
+
+        liikeLaskuri++;
+         
         return uusiMaali;
     }
 
@@ -259,12 +268,6 @@ public class Polunetsija {
     protected int laskeHeuristinenArvio(Solmu alku, Solmu maali) {
         int etaisyysX = Math.abs(maali.getX() - alku.getX());
         int etaisyysY = Math.abs(maali.getY() - alku.getY());
-        if (etaisyysX < 0) {
-            etaisyysX *= -1;
-        }
-        if (etaisyysY < 0) {
-            etaisyysY *= -1;
-        }
         int summa = etaisyysX + etaisyysY;
         return summa;
     }

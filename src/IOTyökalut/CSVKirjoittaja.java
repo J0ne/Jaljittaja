@@ -35,7 +35,7 @@ public class CSVKirjoittaja {
             for (SuorituksenInfo suorituksenInfo : data) {
                 tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getVerkonKoko()));
                 tiedostokirjoittaja.append(EROTINMERKKI);
-                tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.isPolkuLoytyi()));
+                tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getPolkuLoytyi()));
                 tiedostokirjoittaja.append(EROTINMERKKI);
                 tiedostokirjoittaja.append(String.valueOf(suorituksenInfo.getSuorituksenKesto()));
                 tiedostokirjoittaja.append(EROTINMERKKI);
